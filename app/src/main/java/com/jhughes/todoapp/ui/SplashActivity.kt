@@ -19,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        handler.postDelayed({ startMainActivity() }, 3000);
+        handler.postDelayed({ startMainActivity() }, 1500);
     }
 
     private fun startMainActivity() {
