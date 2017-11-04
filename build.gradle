@@ -1,8 +1,10 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 buildscript {
-    ext.kotlin_version = '1.1.51'
-    ext.arch_version = '1.0.0-rc1'
+    ext {
+        kotlin_version = '1.1.51'
+        arch_version = "1.0.0-rc1"
+    }
 
     repositories {
         google()
