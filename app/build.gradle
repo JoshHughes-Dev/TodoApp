@@ -40,14 +40,17 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation 'com.android.support:design:26.1.0'
 
+    /* Data binding (kotlin) */
     kapt 'com.android.databinding:compiler:3.0.0'
 
-    /* Architecture components */
+    /* Dagger */
+    compile 'com.google.dagger:dagger:2.11'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
 
+    /* Architecture components */
     compile "android.arch.lifecycle:runtime:$arch_version"
     compile "android.arch.lifecycle:extensions:$arch_version"
     kapt "android.arch.lifecycle:compiler:$arch_version"
-
     compile "android.arch.persistence.room:runtime:$arch_version"
     compile "android.arch.persistence.room:rxjava2:$arch_version"
     kapt "android.arch.persistence.room:compiler:$arch_version"
