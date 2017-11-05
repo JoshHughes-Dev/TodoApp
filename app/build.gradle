@@ -44,8 +44,11 @@ dependencies {
     kapt 'com.android.databinding:compiler:3.0.0'
 
     /* Dagger */
-    compile 'com.google.dagger:dagger:2.11'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.11'
+    compile "com.google.dagger:dagger:$dagger_version"
+    compile "com.google.dagger:dagger-android-support:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     /* Architecture components */
     compile "android.arch.lifecycle:runtime:$arch_version"
