@@ -1,5 +1,6 @@
 package com.jhughes.todoapp.ui
 
+import android.app.ProgressDialog
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -12,6 +13,7 @@ import com.jhughes.todoapp.injection.component.DaggerMainActivityComponent
 import com.jhughes.todoapp.injection.component.MainActivityComponent
 import com.jhughes.todoapp.injection.module.MainActivityModule
 import com.jhughes.todoapp.ui.viewModel.MainViewModel
+import com.jhughes.todoapp.ui.viewModel.factory.MainViewModelFactory
 import javax.inject.Inject
 
 
@@ -22,6 +24,8 @@ class MainActivity : AppCompatActivity() {
 
     @Inject lateinit var context : Context
     @Inject lateinit var connectivityManager: ConnectivityManager
+    @Inject lateinit var progressDialog: ProgressDialog
+    @Inject lateinit var viewModelFactory: MainViewModelFactory
 
     companion object Factory {
         fun getStartIntent(context: Context): Intent {
@@ -42,16 +46,11 @@ class MainActivity : AppCompatActivity() {
         component.inject(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
+        binding.viewModel = ViewModelProviders.of(this, viewModelFactory)
+                .get(MainViewModel::class.java)
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-
-//        fab.setOnClickListener { view ->
-//            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                    .setAction("Action", null).show()
-//        }
-
     }
 
 }

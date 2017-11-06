@@ -1,12 +1,22 @@
 package com.jhughes.todoapp.ui.viewModel
 
-import android.arch.lifecycle.ViewModel
-import android.util.Log
+import android.app.Application
+import android.databinding.ObservableField
+import android.widget.Toast
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
 
+class MainViewModel @Inject internal constructor(
+        application: Application) : BaseViewModel(application) {
 
-    public fun fabClick() {
-        Log.d("MainViewModel", "on fab click")
+    val testText = ObservableField("")
+
+    init {
+        testText.set("Hi my name is josh")
+    }
+
+    fun fabClick() {
+        Toast.makeText(context, "fab clicked", Toast.LENGTH_LONG).show()
+        testText.set("ahhhh ya clicked it")
     }
 }
