@@ -13,7 +13,28 @@
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.jhughes.todoapp.ui.SplashActivity">
+        android:background="@color/colorPrimary">
+
+        <RelativeLayout
+            android:id="@+id/splash_icon"
+            android:transitionName="splash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:background="@drawable/circle"/>
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_launcher_foreground"/>
+
+        </RelativeLayout>
 
     </android.support.design.widget.CoordinatorLayout>
 

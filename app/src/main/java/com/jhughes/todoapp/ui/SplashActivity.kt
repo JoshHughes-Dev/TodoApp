@@ -4,10 +4,9 @@ import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
-import android.transition.Explode
 import android.util.Log
-import android.view.Window
 import com.jhughes.todoapp.TodoApplication
 import com.jhughes.todoapp.databinding.ActivitySplashBinding
 import com.jhughes.todoapp.injection.component.DaggerSplashActivityComponent
@@ -15,6 +14,7 @@ import com.jhughes.todoapp.injection.component.SplashActivityComponent
 import com.jhughes.todoapp.injection.module.SplashActivityModule
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
+import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
 
 
@@ -26,12 +26,12 @@ class SplashActivity : AppCompatActivity()  {
 
     @Inject lateinit var viewModelFactory: SplashViewModelFactory
 
+    private var hasPerformedTransistion = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setUpInjection();
-
-        setUpWindowTransition()
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
 
@@ -60,15 +60,21 @@ class SplashActivity : AppCompatActivity()  {
         component.inject(this)
     }
 
-    private fun setUpWindowTransition() {
-        window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-        window.enterTransition = Explode()
-    }
-
     private fun onOpenMain() {
         Log.d("Navigate", "openMainMenu")
-        startActivity(MainActivity.getStartIntent(this))
-        finish()
+
+        val intent = MainActivity.getStartIntent(this);
+        var options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, splash_icon, "splash")
+
+        hasPerformedTransistion = true
+        startActivity(intent, options.toBundle())
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if(hasPerformedTransistion) {
+            finish()
+        }
     }
 
     override fun onDestroy() {

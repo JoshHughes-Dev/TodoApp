@@ -3,7 +3,18 @@
     <item>
         <color android:color="@color/colorPrimary"/>
     </item>
+
+    <item
+        android:drawable="@drawable/circle"
+        android:gravity="center"
+        android:width="80dp"
+        android:height="80dp"
+        />
+
     <item
         android:drawable="@drawable/ic_launcher_foreground"
-        android:gravity="center" />
+        android:gravity="center"
+        android:width="80dp"
+        android:height="80dp"/>
+
 </layer-list>

@@ -52,7 +52,8 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@android:drawable/ic_input_add"
             android:tint="@android:color/white"
-            android:onClick="@{() -> viewModel.fabClick()}"/>
+            android:onClick="@{() -> viewModel.fabClick()}"
+            android:transitionName="splash"/>
 
     </android.support.design.widget.CoordinatorLayout>
 
