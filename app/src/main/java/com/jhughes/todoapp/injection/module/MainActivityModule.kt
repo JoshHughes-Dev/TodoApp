@@ -2,6 +2,7 @@ package com.jhughes.todoapp.injection.module
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.net.ConnectivityManager
 import com.jhughes.todoapp.ui.MainActivity
 import com.jhughes.todoapp.ui.viewModel.factory.MainViewModelFactory
 import dagger.Module
@@ -24,8 +25,8 @@ class MainActivityModule(private val activity: MainActivity) {
 
 
     @Provides
-    fun provideMainViewModelFactory():
+    fun provideMainViewModelFactory(connectivityManager: ConnectivityManager):
             MainViewModelFactory {
-        return MainViewModelFactory(activity.application)
+        return MainViewModelFactory(activity.application, connectivityManager)
     }
 }

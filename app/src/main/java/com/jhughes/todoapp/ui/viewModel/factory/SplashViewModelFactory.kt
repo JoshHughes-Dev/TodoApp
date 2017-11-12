@@ -3,16 +3,16 @@ package com.jhughes.todoapp.ui.viewModel.factory
 import android.app.Application
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
-import android.net.ConnectivityManager
-import com.jhughes.todoapp.ui.viewModel.MainViewModel
+import android.os.Handler
+import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 
-class MainViewModelFactory(
+class SplashViewModelFactory(
         private val application: Application,
-        private val connectivityManager: ConnectivityManager) : ViewModelProvider.Factory {
+        private val uiThread: Handler) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
-            return MainViewModel(application, connectivityManager) as T
+        if (modelClass.isAssignableFrom(SplashViewModel::class.java)) {
+            return SplashViewModel(application, uiThread) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
