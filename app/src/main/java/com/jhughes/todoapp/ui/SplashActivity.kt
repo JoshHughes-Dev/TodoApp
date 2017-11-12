@@ -1,5 +1,6 @@
 package com.jhughes.todoapp.ui
 
+import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -46,12 +47,14 @@ class SplashActivity : AppCompatActivity(), Navigator  {
         setContentView(R.layout.activity_splash)
 
         binding.viewModel?.navigator = this
+
+        lifecycle.addObserver(binding.viewModel as LifecycleObserver)
     }
 
-    override fun onStart() {
-        super.onStart()
-        binding.viewModel?.startMain()
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        binding.viewModel?.startMain()
+//    }
 
     override fun onOpenMain() {
         startActivity(MainActivity.getStartIntent(this))
@@ -60,5 +63,7 @@ class SplashActivity : AppCompatActivity(), Navigator  {
     override fun onDestroy() {
         super.onDestroy()
         binding.viewModel?.navigator = null
+
+        lifecycle.removeObserver(binding.viewModel as LifecycleObserver)
     }
 }

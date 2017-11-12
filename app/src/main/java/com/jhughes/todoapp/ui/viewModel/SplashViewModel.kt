@@ -1,15 +1,19 @@
 package com.jhughes.todoapp.ui.viewModel
 
 import android.app.Application
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.OnLifecycleEvent
 import android.os.Handler
 import javax.inject.Inject
 
 class SplashViewModel @Inject internal constructor(
         application: Application,
-        private val uiThread: Handler) : BaseViewModel(application) {
+        private val uiThread: Handler) : BaseViewModel(application), LifecycleObserver {
 
     var navigator : Navigator? = null
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun startMain() {
         uiThread.postDelayed({
             navigator?.onOpenMain()
