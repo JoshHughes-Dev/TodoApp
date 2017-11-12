@@ -58,6 +58,8 @@ dependencies {
     compile "android.arch.persistence.room:rxjava2:$arch_version"
     kapt "android.arch.persistence.room:compiler:$arch_version"
 
+    compile 'net.danlew:android.joda:2.9.9.1'
+
     testImplementation 'junit:junit:4.12'
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
