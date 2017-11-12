@@ -1,10 +1,12 @@
 package com.jhughes.todoapp.ui
 
 import android.arch.lifecycle.LifecycleObserver
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.transition.Explode
+import android.util.Log
 import android.view.Window
 import com.jhughes.todoapp.R
 import com.jhughes.todoapp.TodoApplication
@@ -12,13 +14,12 @@ import com.jhughes.todoapp.databinding.ActivitySplashBinding
 import com.jhughes.todoapp.injection.component.DaggerSplashActivityComponent
 import com.jhughes.todoapp.injection.component.SplashActivityComponent
 import com.jhughes.todoapp.injection.module.SplashActivityModule
-import com.jhughes.todoapp.ui.viewModel.Navigator
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
 import javax.inject.Inject
 
 
-class SplashActivity : AppCompatActivity(), Navigator  {
+class SplashActivity : AppCompatActivity()  {
 
     private lateinit var component : SplashActivityComponent
     private lateinit var binding : ActivitySplashBinding
@@ -46,24 +47,21 @@ class SplashActivity : AppCompatActivity(), Navigator  {
 
         setContentView(R.layout.activity_splash)
 
-        binding.viewModel?.navigator = this
+        binding.viewModel?.startActivityEvent!!.observe(this, Observer<Void> {
+            onOpenMain()
+        })
 
         lifecycle.addObserver(binding.viewModel as LifecycleObserver)
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        binding.viewModel?.startMain()
-//    }
-
-    override fun onOpenMain() {
+    private fun onOpenMain() {
+        Log.d("Navigate", "openMainMenu")
         startActivity(MainActivity.getStartIntent(this))
+        finish()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        binding.viewModel?.navigator = null
-
         lifecycle.removeObserver(binding.viewModel as LifecycleObserver)
     }
 }

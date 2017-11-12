@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.jhughes.todoapp.TodoApplication
 import com.jhughes.todoapp.databinding.ActivityMainBinding
 import com.jhughes.todoapp.injection.component.DaggerMainActivityComponent
@@ -35,6 +36,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Log.d("MainActivity", "onCreate")
 
         val todoApp = application as TodoApplication
 
