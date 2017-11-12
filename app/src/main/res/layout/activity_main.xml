@@ -34,20 +34,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:gravity="center"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.testText}"
-                tools:text="text woooo"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.testTextTwo}"
-                tools:text="more text yayaya"/>
+            <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:adapter="@{viewModel.adapter}"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"/>
 
         </LinearLayout>
 
