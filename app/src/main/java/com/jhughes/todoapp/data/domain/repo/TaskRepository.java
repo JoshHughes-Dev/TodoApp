@@ -7,6 +7,8 @@ import java.util.List;
 
 public class TaskRepository {
 
+    // TODO: 19/11/2017 do local list of data to represent cache in the domain
+
     private final TaskDataSource taskDataSource;
 
     public TaskRepository(TaskDataSource taskDataSource) {
