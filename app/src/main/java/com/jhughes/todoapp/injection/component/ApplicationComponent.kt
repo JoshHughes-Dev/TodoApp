@@ -4,6 +4,8 @@ import android.app.NotificationManager
 import android.net.ConnectivityManager
 import android.os.Handler
 import com.jhughes.todoapp.TodoApplication
+import com.jhughes.todoapp.data.local.db.AppDatabase
+import com.jhughes.todoapp.data.manager.TasksManager
 import com.jhughes.todoapp.injection.module.ApplicationModule
 import dagger.Component
 import javax.inject.Singleton
@@ -19,6 +21,10 @@ public interface ApplicationComponent {
     fun connectivityManager(): ConnectivityManager
 
     fun notifcationManager(): NotificationManager
+
+    fun appDatabase() : AppDatabase
+
+    fun tasksManager() : TasksManager
 }
 
 //AndroidInjectionModule::class,

@@ -5,32 +5,36 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.jhughes.todoapp.data.domain.Task
-import com.jhughes.todoapp.databinding.RowTodoItemBinding
+import com.jhughes.todoapp.databinding.RowTaskItemBinding
 import com.jhughes.todoapp.ui.viewModel.TaskRowViewModel
-import org.joda.time.DateTime
 
-class TaskAdapter(private val application : Application) : RecyclerView.Adapter<DataBindingViewHolder<RowTodoItemBinding>>() {
+class TaskAdapter(private val application : Application) : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBinding>>() {
 
     private val tasks: MutableList<Task> = ArrayList()
 
-    init {
-        tasks.add(Task(true, "task 1", DateTime.now()))
-        tasks.add(Task(false, "task 2", DateTime.now()))
-        tasks.add(Task(false, "task 3", DateTime.now()))
+    fun addTasks(tasks : List<Task>){
+        this.tasks.clear()
+        this.tasks.addAll(tasks)
+        notifyDataSetChanged()
+    }
+
+    fun addTask(task : Task) {
+        this.tasks.add(task)
+        notifyItemInserted(tasks.size)
     }
 
     override fun getItemCount(): Int {
         return tasks.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DataBindingViewHolder<RowTodoItemBinding> {
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DataBindingViewHolder<RowTaskItemBinding> {
         val inflater = LayoutInflater.from(parent?.context)
-        val binding = RowTodoItemBinding.inflate(inflater, parent, false)
+        val binding = RowTaskItemBinding.inflate(inflater, parent, false)
 
         return DataBindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DataBindingViewHolder<RowTodoItemBinding>?, position: Int) {
+    override fun onBindViewHolder(holder: DataBindingViewHolder<RowTaskItemBinding>?, position: Int) {
         holder!!.binding.viewModel = TaskRowViewModel(application, tasks[position])
         holder.binding.executePendingBindings()
     }
