@@ -11,7 +11,7 @@ data class TaskEntity(
 
         @PrimaryKey
         var id : Int,
-        @ColumnInfo(name = "is_complete")
+        @ColumnInfo(name = "completed")
         val isComplete: Boolean,
         @ColumnInfo(name = "description")
         val description: String,

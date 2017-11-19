@@ -1,6 +1,6 @@
 package com.jhughes.todoapp.injection.module
 
-import android.os.Handler
+import com.jhughes.todoapp.data.util.AppExecutors
 import com.jhughes.todoapp.ui.SplashActivity
 import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
 import dagger.Module
@@ -10,8 +10,8 @@ import dagger.Provides
 class SplashActivityModule(private val activity: SplashActivity) {
 
     @Provides
-    fun provideSplashViewModelFactory(uiThread: Handler):
+    fun provideSplashViewModelFactory(appExecutors: AppExecutors):
             SplashViewModelFactory {
-        return SplashViewModelFactory(activity.application, uiThread)
+        return SplashViewModelFactory(activity.application, appExecutors)
     }
 }

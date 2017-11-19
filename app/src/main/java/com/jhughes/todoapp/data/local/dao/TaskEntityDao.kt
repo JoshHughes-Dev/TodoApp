@@ -24,6 +24,9 @@ interface TaskEntityDao {
     @Update(onConflict = REPLACE)
     fun updateTask(taskEntity: TaskEntity)
 
+    @Query("UPDATE $TABLE_NAME SET completed = :completed WHERE id = :taskId")
+    fun updateCompleted(taskId: Int, completed: Boolean)
+
     @Delete
     fun deleteTask(taskEntity: TaskEntity)
 

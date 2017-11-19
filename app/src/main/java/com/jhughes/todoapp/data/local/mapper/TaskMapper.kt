@@ -1,6 +1,6 @@
 package com.jhughes.todoapp.data.local.mapper
 
-import com.jhughes.todoapp.data.domain.Task
+import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.local.entity.TaskEntity
 
 class TaskMapper : EntityMapper<Task, TaskEntity> {

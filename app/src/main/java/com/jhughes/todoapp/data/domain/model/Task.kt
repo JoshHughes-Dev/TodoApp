@@ -1,4 +1,4 @@
-package com.jhughes.todoapp.data.domain
+package com.jhughes.todoapp.data.domain.model
 
 import org.joda.time.DateTime
 

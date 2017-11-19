@@ -2,10 +2,10 @@ package com.jhughes.todoapp.injection.component
 
 import android.app.NotificationManager
 import android.net.ConnectivityManager
-import android.os.Handler
 import com.jhughes.todoapp.TodoApplication
+import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.data.local.db.AppDatabase
-import com.jhughes.todoapp.data.manager.TasksManager
+import com.jhughes.todoapp.data.util.AppExecutors
 import com.jhughes.todoapp.injection.module.ApplicationModule
 import dagger.Component
 import javax.inject.Singleton
@@ -16,7 +16,7 @@ interface ApplicationComponent {
 
     fun inject(app : TodoApplication)
 
-    fun uiThread(): Handler
+    fun appExecutors() : AppExecutors
 
     fun connectivityManager(): ConnectivityManager
 
@@ -24,7 +24,7 @@ interface ApplicationComponent {
 
     fun appDatabase() : AppDatabase
 
-    fun tasksManager() : TasksManager
+    fun tasksRepository() : TaskRepository
 }
 
 //AndroidInjectionModule::class,

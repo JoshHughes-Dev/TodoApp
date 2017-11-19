@@ -4,7 +4,7 @@ import android.app.Application
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.jhughes.todoapp.data.domain.Task
+import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.databinding.RowTaskItemBinding
 import com.jhughes.todoapp.ui.viewModel.TaskRowViewModel
 
