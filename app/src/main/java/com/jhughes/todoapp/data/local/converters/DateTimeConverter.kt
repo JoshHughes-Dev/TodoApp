@@ -1,4 +1,4 @@
-package com.jhughes.todoapp.data.local.db
+package com.jhughes.todoapp.data.local.converters
 
 import android.arch.persistence.room.TypeConverter
 import org.joda.time.DateTime

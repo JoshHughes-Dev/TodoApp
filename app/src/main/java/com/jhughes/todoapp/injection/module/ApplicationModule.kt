@@ -44,7 +44,8 @@ class ApplicationModule(private val application: Application) {
     @Provides
     @Singleton
     fun provideAppDatabase() : AppDatabase {
-        return Room.databaseBuilder(application.applicationContext, AppDatabase::class.java, "app.db")
+        return Room.databaseBuilder(application.applicationContext,
+                AppDatabase::class.java, AppDatabase.DATABASE_NAME)
                 .allowMainThreadQueries() //temp until i use threads properly
                 .build()
     }
@@ -54,6 +55,5 @@ class ApplicationModule(private val application: Application) {
     fun provideTaskManager(database : AppDatabase) : TasksManager {
         return TasksManager(database, TaskMapper())
     }
-
 
 }

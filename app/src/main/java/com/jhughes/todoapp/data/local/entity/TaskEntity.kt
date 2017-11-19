@@ -3,10 +3,11 @@ package com.jhughes.todoapp.data.local.entity
 import android.arch.persistence.room.ColumnInfo
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
+import com.jhughes.todoapp.data.local.dao.TaskEntityDao
 import org.joda.time.DateTime
 
-@Entity(tableName = "tasks")
-data class RoomTask(
+@Entity(tableName = TaskEntityDao.TABLE_NAME)
+data class TaskEntity(
 
         @PrimaryKey
         var id : Int,

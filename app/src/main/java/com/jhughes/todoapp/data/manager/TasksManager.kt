@@ -4,11 +4,13 @@ import com.jhughes.todoapp.data.domain.Task
 import com.jhughes.todoapp.data.local.db.AppDatabase
 import com.jhughes.todoapp.data.local.mapper.TaskMapper
 
-class TasksManager(val database : AppDatabase, val mapper: TaskMapper) {
+class TasksManager(
+        private val database : AppDatabase,
+        private val mapper : TaskMapper) {
 
     fun getAllTasks() : MutableList<Task> {
-        var roomTasks = database.taskDao().getAllTasks()
-        var tasks = ArrayList<Task>()
+        val roomTasks = database.taskDao().getAllTasks()
+        val tasks = ArrayList<Task>()
 
         roomTasks.forEach {
             tasks.add(mapper.toDomain(it))
@@ -18,8 +20,10 @@ class TasksManager(val database : AppDatabase, val mapper: TaskMapper) {
     }
 
     fun addTask(task: Task) {
-        val roomTask = mapper.toLocal(task)
+        database.taskDao().insertTask(mapper.toEntity(task))
+    }
 
-        database.taskDao().insertTask(roomTask)
+    fun clearTasks() {
+        database.taskDao().deleteAll()
     }
 }

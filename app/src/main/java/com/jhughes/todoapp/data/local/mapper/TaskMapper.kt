@@ -1,15 +1,15 @@
 package com.jhughes.todoapp.data.local.mapper
 
 import com.jhughes.todoapp.data.domain.Task
-import com.jhughes.todoapp.data.local.entity.RoomTask
+import com.jhughes.todoapp.data.local.entity.TaskEntity
 
-class TaskMapper {
+class TaskMapper : EntityMapper<Task, TaskEntity> {
 
-    fun toLocal(task : Task) : RoomTask {
-       return RoomTask(task.id, task.isComplete, task.description, task.createdAt)
+    override fun toEntity(model: Task): TaskEntity {
+        return TaskEntity(model.id, model.isComplete, model.description, model.createdAt)
     }
 
-    fun toDomain(roomTask: RoomTask) : Task {
-        return Task(roomTask.id, roomTask.isComplete, roomTask.description, roomTask.createdAt)
+    override fun toDomain(entity: TaskEntity) : Task {
+        return Task(entity.id, entity.isComplete, entity.description, entity.createdAt)
     }
 }

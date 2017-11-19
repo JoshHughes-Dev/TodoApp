@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(modules = arrayOf(ApplicationModule::class))
-public interface ApplicationComponent {
+interface ApplicationComponent {
 
     fun inject(app : TodoApplication)
 
@@ -20,7 +20,7 @@ public interface ApplicationComponent {
 
     fun connectivityManager(): ConnectivityManager
 
-    fun notifcationManager(): NotificationManager
+    fun notificationManager(): NotificationManager
 
     fun appDatabase() : AppDatabase
 
