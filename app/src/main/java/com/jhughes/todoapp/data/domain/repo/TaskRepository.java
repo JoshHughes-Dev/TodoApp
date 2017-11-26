@@ -3,47 +3,90 @@ package com.jhughes.todoapp.data.domain.repo;
 import com.jhughes.todoapp.data.domain.model.Task;
 import com.jhughes.todoapp.data.local.repo.TaskDataSource;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TaskRepository {
 
-    // TODO: 19/11/2017 do local list of data to represent cache in the domain
+    private final TaskDataSource localDataSource;
 
-    private final TaskDataSource taskDataSource;
+    private Map<String, Task> tasksMap;
 
     public TaskRepository(TaskDataSource taskDataSource) {
-        this.taskDataSource = taskDataSource;
+        this.localDataSource = taskDataSource;
+
+        localDataSource.getTasks(new GetTasksCallback() {
+            @Override
+            public void onComplete(List<Task> tasks) {
+                refreshCache(tasks);
+            }
+        });
     }
 
     public void getTasks(final GetTasksCallback callback) {
 
-        taskDataSource.getTasks(new GetTasksCallback() {
-            @Override
-            public void onComplete(List<Task> tasks) {
-                callback.onComplete(tasks);
-            }
-        });
+        if(tasksMap != null) {
+            callback.onComplete(new ArrayList<>(tasksMap.values()));
+        } else {
+            localDataSource.getTasks(new GetTasksCallback() {
+                @Override
+                public void onComplete(List<Task> tasks) {
+                    refreshCache(tasks);
+                }
+            });
+        }
     }
 
     public void getTask(int taskId, final GetTaskCallback callback) {
-        taskDataSource.getTask(taskId, new GetTaskCallback() {
-            @Override
-            public void onComplete(Task task) {
-                callback.onComplete(task);
+
+        if (tasksMap != null) {
+            final String id = String.valueOf(taskId);
+
+            if (tasksMap.containsKey(id)) {
+                callback.onComplete(tasksMap.get(id));
             }
-        });
+        } else {
+            localDataSource.getTask(taskId, new GetTaskCallback() {
+                @Override
+                public void onComplete(Task task) {
+                    callback.onComplete(task);
+                }
+            });
+        }
     }
 
     public void addTask(Task task) {
-        taskDataSource.saveTask(task);
+        tasksMap.put(String.valueOf(task.getId()), task);
+        localDataSource.saveTask(task);
     }
 
-    public void completeTask(Task task) {
-        taskDataSource.completeTask(task);
+    public void completeTask(String taskId) {
+        if(tasksMap.containsKey(taskId)) {
+            Task task = tasksMap.get(taskId);
+            task.setComplete(true);
+            tasksMap.put(taskId, task);
+
+            localDataSource.completeTask(task);
+        }
     }
 
     public void clearTasks() {
-        taskDataSource.clearTasks();
+        tasksMap.clear();
+        localDataSource.clearTasks();
+    }
+
+    private void refreshCache(List<Task> tasks) {
+        if(tasksMap == null) {
+            tasksMap = new LinkedHashMap<>();
+        }
+
+        tasksMap.clear();
+
+        for(Task task : tasks) {
+            tasksMap.put(String.valueOf(task.getId()), task);
+        }
     }
 
     public interface GetTasksCallback {
