@@ -1,6 +1,7 @@
 package com.jhughes.todoapp.ui
 
 import android.app.ProgressDialog
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
@@ -13,6 +14,7 @@ import com.jhughes.todoapp.databinding.ActivityMainBinding
 import com.jhughes.todoapp.injection.component.DaggerMainActivityComponent
 import com.jhughes.todoapp.injection.component.MainActivityComponent
 import com.jhughes.todoapp.injection.module.MainActivityModule
+import com.jhughes.todoapp.ui.fragment.AddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.MainViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.MainViewModelFactory
 import javax.inject.Inject
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var component : MainActivityComponent
     private lateinit var binding : ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
 
     @Inject lateinit var context : Context
     @Inject lateinit var connectivityManager: ConnectivityManager
@@ -49,10 +52,23 @@ class MainActivity : AppCompatActivity() {
         component.inject(this)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.viewModel = ViewModelProviders.of(this, viewModelFactory)
+
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(MainViewModel::class.java)
+
+        binding.viewModel = viewModel
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
+        viewModel.navigationEvent.observe(this, Observer {
+            openAddTask()
+        })
+
+    }
+
+    private fun openAddTask() {
+        val dialog = AddTaskDialogFragment.create()
+        dialog.show(supportFragmentManager, AddTaskDialogFragment.TAG)
     }
 }

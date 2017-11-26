@@ -27,7 +27,7 @@ public class TaskRepository {
 
     public void getTasks(final GetTasksCallback callback) {
 
-        if(tasksMap != null) {
+        if (tasksMap != null) {
             callback.onComplete(new ArrayList<>(tasksMap.values()));
         } else {
             localDataSource.getTasks(new GetTasksCallback() {
@@ -58,12 +58,16 @@ public class TaskRepository {
     }
 
     public void addTask(Task task) {
+        if(tasksMap == null) {
+            tasksMap = new LinkedHashMap<>();
+        }
         tasksMap.put(String.valueOf(task.getId()), task);
         localDataSource.saveTask(task);
     }
 
     public void completeTask(String taskId) {
-        if(tasksMap.containsKey(taskId)) {
+
+        if (tasksMap != null && tasksMap.containsKey(taskId)) {
             Task task = tasksMap.get(taskId);
             task.setComplete(true);
             tasksMap.put(taskId, task);
@@ -73,18 +77,20 @@ public class TaskRepository {
     }
 
     public void clearTasks() {
-        tasksMap.clear();
+        if (tasksMap != null) {
+            tasksMap.clear();
+        }
         localDataSource.clearTasks();
     }
 
     private void refreshCache(List<Task> tasks) {
-        if(tasksMap == null) {
+        if (tasksMap == null) {
             tasksMap = new LinkedHashMap<>();
         }
 
         tasksMap.clear();
 
-        for(Task task : tasks) {
+        for (Task task : tasks) {
             tasksMap.put(String.valueOf(task.getId()), task);
         }
     }

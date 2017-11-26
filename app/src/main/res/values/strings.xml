@@ -2,4 +2,11 @@
     <string name="app_name">TodoApp</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
+
+
+    <!-- Add task-->
+    <eat-comment/>
+
+    <string name="add_task_toolbar_save">Save</string>
+
 </resources>

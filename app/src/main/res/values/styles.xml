@@ -30,4 +30,15 @@
         <item name="android:statusBarColor">#00000000</item>
     </style>
 
+    <style name="AppTheme.FullScreenDialog">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowAnimationStyle">@style/DialogSlideInAnimation</item>
+    </style>
+
+    <style name="DialogSlideInAnimation">
+        <item name="android:windowEnterAnimation">@anim/slide_in_bottom</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_bottom</item>
+    </style>
+
 </resources>
