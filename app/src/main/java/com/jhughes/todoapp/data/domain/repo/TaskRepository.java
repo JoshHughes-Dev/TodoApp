@@ -66,13 +66,22 @@ public class TaskRepository {
     }
 
     public void completeTask(String taskId) {
-
         if (tasksMap != null && tasksMap.containsKey(taskId)) {
             Task task = tasksMap.get(taskId);
             task.setComplete(true);
             tasksMap.put(taskId, task);
 
             localDataSource.completeTask(task);
+        }
+    }
+
+    public void activateTask(String taskId) {
+        if (tasksMap != null && tasksMap.containsKey(taskId)) {
+            Task task = tasksMap.get(taskId);
+            task.setComplete(false);
+            tasksMap.put(taskId, task);
+
+            localDataSource.activateTask(task);
         }
     }
 

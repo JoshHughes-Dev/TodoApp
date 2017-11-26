@@ -50,20 +50,27 @@ class TaskDataSource(
     }
 
     fun completeTask(task: Task) {
+        changeTaskStatus(task, true)
+    }
 
-        val taskEntity = taskMapper.toEntity(task)
-
-        val runnable = Runnable {
-            taskEntityDao.updateCompleted(taskEntity.id, true)
-        }
-
-        appExecutors.diskIO().execute(runnable)
+    fun activateTask(task: Task) {
+        changeTaskStatus(task, false)
     }
 
     fun clearTasks() {
 
         val runnable = Runnable {
             taskEntityDao.deleteAll()
+        }
+
+        appExecutors.diskIO().execute(runnable)
+    }
+
+    private fun changeTaskStatus(task: Task, status: Boolean) {
+        val taskEntity = taskMapper.toEntity(task)
+
+        val runnable = Runnable {
+            taskEntityDao.updateCompleted(taskEntity.id, false)
         }
 
         appExecutors.diskIO().execute(runnable)

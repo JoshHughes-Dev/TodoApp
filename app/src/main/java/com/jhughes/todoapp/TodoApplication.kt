@@ -27,14 +27,17 @@ class TodoApplication : Application() {
 
         component.inject(this)
 
-        setUpMockData()
+        //setUpMockData()
     }
 
     private fun setUpMockData() {
+
         taskRepo.clearTasks()
 
         taskRepo.addTask(Task(1, true, "task 1", DateTime.now()))
         taskRepo.addTask(Task(2, false, "task 2", DateTime.now()))
         taskRepo.addTask(Task(3, false, "task 3", DateTime.now()))
+        taskRepo.addTask(Task(4, false, "task 4", DateTime.now()))
+        taskRepo.addTask(Task(5, false, "task 5", DateTime.now()))
     }
 }

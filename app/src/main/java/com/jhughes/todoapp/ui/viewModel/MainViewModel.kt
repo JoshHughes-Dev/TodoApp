@@ -13,9 +13,9 @@ import javax.inject.Inject
 class MainViewModel @Inject internal constructor(
         application: Application,
         private val connectivityManager: ConnectivityManager,
-        private val taskRepository: TaskRepository) : BaseViewModel(application) {
+        taskRepository: TaskRepository) : BaseViewModel(application) {
 
-    private val adapter = TaskAdapter(application)
+    private val adapter = TaskAdapter(application, taskRepository)
 
     val navigationEvent = SingleLiveEvent<Navigator>()
 
@@ -31,13 +31,6 @@ class MainViewModel @Inject internal constructor(
     }
 
     fun fabClick() {
-//        Toast.makeText(context, "fab clicked", Toast.LENGTH_LONG).show()
-//
-//        val task = Task(adapter.itemCount + 1, false, "new task", DateTime.now())
-//
-//        taskRepository.addTask(task)
-//        adapter.addTask(task)
-
         navigationEvent.call()
     }
 }
