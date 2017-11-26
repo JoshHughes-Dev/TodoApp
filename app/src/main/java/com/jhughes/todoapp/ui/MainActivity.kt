@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var component : MainActivityComponent
+    lateinit var component : MainActivityComponent
     private lateinit var binding : ActivityMainBinding
 
     @Inject lateinit var context : Context
