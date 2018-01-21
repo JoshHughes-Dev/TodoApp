@@ -20,7 +20,7 @@ import com.jhughes.todoapp.ui.viewModel.factory.MainViewModelFactory
 import javax.inject.Inject
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AddTaskDialogFragment.OnActionListener{
 
     lateinit var component : MainActivityComponent
     private lateinit var binding : ActivityMainBinding
@@ -65,6 +65,10 @@ class MainActivity : AppCompatActivity() {
             openAddTask()
         })
 
+    }
+
+    override fun onTaskAdded() {
+        viewModel.setTasks()
     }
 
     private fun openAddTask() {

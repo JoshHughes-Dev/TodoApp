@@ -2,6 +2,7 @@ package com.jhughes.todoapp.ui.fragment
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
@@ -9,7 +10,6 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import com.jhughes.todoapp.R
 import com.jhughes.todoapp.TodoApplication
-import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
 import com.jhughes.todoapp.injection.component.AddTaskFragmentComponent
 import com.jhughes.todoapp.injection.component.DaggerAddTaskFragmentComponent
@@ -24,7 +24,8 @@ class AddTaskDialogFragment : DialogFragment() {
     private lateinit var binding : FragmentAddTaskBinding
 
     @Inject lateinit var viewModelFactory: AddTaskViewModelFactory
-    @Inject lateinit var taskRepository: TaskRepository
+
+    private lateinit var onActionListener : OnActionListener
 
     companion object Factory {
         val TAG = "AddTaskDialogFragment"
@@ -36,6 +37,16 @@ class AddTaskDialogFragment : DialogFragment() {
             val dialog = AddTaskDialogFragment()
             dialog.arguments = args
             return dialog
+        }
+    }
+
+    override fun onAttach(context: Context?) {
+        super.onAttach(context)
+        try {
+            onActionListener = context as OnActionListener
+        } catch (e: ClassCastException) {
+            throw ClassCastException(
+                    context.toString() + " must implement " + OnActionListener::class.java.simpleName)
         }
     }
 
@@ -60,7 +71,8 @@ class AddTaskDialogFragment : DialogFragment() {
                 .get(AddTaskViewModel::class.java)
 
         binding.viewModel?.dismissEvent?.observe(this, Observer<Void>({
-           dismiss()
+            onActionListener.onTaskAdded()
+            dismiss()
         }))
 
         initToolbar(binding.toolbar)
@@ -95,5 +107,9 @@ class AddTaskDialogFragment : DialogFragment() {
 
             result
         }
+    }
+
+    public interface OnActionListener {
+        fun onTaskAdded()
     }
 }

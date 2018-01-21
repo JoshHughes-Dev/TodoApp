@@ -76,7 +76,7 @@ class TaskDataSource(
         val taskEntity = taskMapper.toEntity(task)
 
         val runnable = Runnable {
-            taskEntityDao.updateCompleted(taskEntity.id, false)
+            taskEntityDao.updateCompleted(taskEntity.id, status)
         }
 
         appExecutors.diskIO().execute(runnable)

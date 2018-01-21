@@ -13,16 +13,14 @@ import javax.inject.Inject
 class MainViewModel @Inject internal constructor(
         application: Application,
         private val connectivityManager: ConnectivityManager,
-        taskRepository: TaskRepository) : BaseViewModel(application) {
+        private val taskRepository: TaskRepository) : BaseViewModel(application) {
 
     private val adapter = TaskAdapter(application, taskRepository)
 
     val navigationEvent = SingleLiveEvent<Navigator>()
 
     init {
-        taskRepository.getTasks(TaskRepository.GetTasksCallback {
-            tasks ->  adapter.addTasks(tasks)
-        })
+        setTasks()
     }
 
     @Bindable
@@ -32,5 +30,11 @@ class MainViewModel @Inject internal constructor(
 
     fun fabClick() {
         navigationEvent.call()
+    }
+
+    fun setTasks() {
+        taskRepository.getTasks(TaskRepository.GetTasksCallback {
+            tasks ->  adapter.addTasks(tasks)
+        })
     }
 }

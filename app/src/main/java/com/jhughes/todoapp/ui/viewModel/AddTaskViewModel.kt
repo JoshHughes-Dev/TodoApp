@@ -7,21 +7,15 @@ import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import javax.inject.Inject
 
 class AddTaskViewModel @Inject internal constructor(
-        application: Application, val taskRepository: TaskRepository) : BaseViewModel(application) {
+        application: Application, private val taskRepository: TaskRepository) : BaseViewModel(application) {
 
     val descriptionText : ObservableField<String> = ObservableField()
 
     val dismissEvent = SingleLiveEvent<Void>()
 
     fun save() {
-        //taskRepository.addTask(null)
-
         taskRepository.addTask(descriptionText.get(), TaskRepository.GetTaskCallback {
-            waaa()
+            dismissEvent.postValue(null)
         })
-    }
-
-    private fun waaa() {
-        dismissEvent.call()
     }
 }
