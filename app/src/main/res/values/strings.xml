@@ -8,5 +8,6 @@
     <eat-comment/>
 
     <string name="add_task_toolbar_save">Save</string>
+    <string name="add_task_description_hint">Description</string>
 
 </resources>

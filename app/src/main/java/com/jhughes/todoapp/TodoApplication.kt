@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class TodoApplication : Application() {
 
-    lateinit var component : ApplicationComponent
+    public lateinit var component : ApplicationComponent
 
     @Inject lateinit var connectivityManager: ConnectivityManager
     @Inject lateinit var taskRepo : TaskRepository
@@ -29,6 +29,7 @@ class TodoApplication : Application() {
 
         //setUpMockData()
     }
+
 
     private fun setUpMockData() {
 

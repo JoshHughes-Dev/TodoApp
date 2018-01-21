@@ -9,6 +9,7 @@ public class Navigator {
     private final int requestCode;
     private final boolean finishActivity;
     private final String key;
+    private final boolean dismiss;
 
     private Navigator(Builder builder) {
         startActivity = builder.startActivity;
@@ -16,6 +17,7 @@ public class Navigator {
         requestCode = builder.requestCode;
         finishActivity = builder.finishActivity;
         key = builder.key;
+        dismiss = builder.dismiss;
     }
 
     public static Builder newBuilder() {
@@ -49,6 +51,7 @@ public class Navigator {
         private int requestCode;
         private boolean finishActivity;
         private String key;
+        private boolean dismiss;
 
         public Builder withActivity(Class<?> activity) {
             this.startActivity = activity;
@@ -72,6 +75,11 @@ public class Navigator {
 
         public Builder withKey(String key) {
             this.key = key;
+            return this;
+        }
+
+        public Builder dismiss() {
+            this.dismiss = true;
             return this;
         }
 

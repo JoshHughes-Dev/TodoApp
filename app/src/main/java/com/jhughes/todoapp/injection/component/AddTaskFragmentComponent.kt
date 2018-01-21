@@ -8,7 +8,7 @@ import dagger.Component
 @PerFragment
 @Component(
         modules = arrayOf(AddTaskFragmentModule::class),
-        dependencies = arrayOf(MainActivityComponent::class)
+        dependencies = arrayOf(ApplicationComponent::class)
 )
 interface AddTaskFragmentComponent {
 

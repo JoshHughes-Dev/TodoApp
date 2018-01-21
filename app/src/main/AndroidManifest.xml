@@ -26,7 +26,8 @@
             android:name=".ui.MainActivity"
             android:label="@string/title_activity_main"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.Main"
+            android:windowSoftInputMode="adjustResize"/>
     </application>
 
 </manifest>

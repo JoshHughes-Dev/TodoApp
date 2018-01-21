@@ -1,5 +1,6 @@
 package com.jhughes.todoapp.ui.fragment
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
@@ -7,11 +8,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.Toolbar
 import android.view.*
 import com.jhughes.todoapp.R
+import com.jhughes.todoapp.TodoApplication
+import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
 import com.jhughes.todoapp.injection.component.AddTaskFragmentComponent
 import com.jhughes.todoapp.injection.component.DaggerAddTaskFragmentComponent
 import com.jhughes.todoapp.injection.module.AddTaskFragmentModule
-import com.jhughes.todoapp.ui.MainActivity
 import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.AddTaskViewModelFactory
 import javax.inject.Inject
@@ -22,6 +24,7 @@ class AddTaskDialogFragment : DialogFragment() {
     private lateinit var binding : FragmentAddTaskBinding
 
     @Inject lateinit var viewModelFactory: AddTaskViewModelFactory
+    @Inject lateinit var taskRepository: TaskRepository
 
     companion object Factory {
         val TAG = "AddTaskDialogFragment"
@@ -39,11 +42,12 @@ class AddTaskDialogFragment : DialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
 
         component = DaggerAddTaskFragmentComponent.builder()
                 .addTaskFragmentModule(AddTaskFragmentModule(activity))
-                .mainActivityComponent((activity as MainActivity).component)
+                .applicationComponent((activity.application as TodoApplication).component)
                 .build()
 
         component.inject(this)
@@ -55,46 +59,41 @@ class AddTaskDialogFragment : DialogFragment() {
         binding.viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(AddTaskViewModel::class.java)
 
-        val closeDrawable = ContextCompat.getDrawable(context, R.drawable.ic_close)
+        binding.viewModel?.dismissEvent?.observe(this, Observer<Void>({
+           dismiss()
+        }))
 
-        binding.toolbar.navigationIcon = closeDrawable
-
-        binding.toolbar.setNavigationOnClickListener {
-            dismiss()
-        }
-
-        binding.toolbar.inflateMenu(R.menu.menu_add_task)
-        binding.toolbar.setOnMenuItemClickListener(object : Toolbar.OnMenuItemClickListener {
-            override fun onMenuItemClick(item: MenuItem?): Boolean {
-                val id = item!!.itemId
-
-                if(id == R.id.action_save) {
-                    //todo onTaskAdded callback
-                    dismiss()
-                    return true
-                }
-
-                return false
-            }
-        })
+        initToolbar(binding.toolbar)
 
         return binding.root
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?, inflater: MenuInflater?) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater!!.inflate(R.menu.menu_add_task, menu)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        val id = item!!.itemId
+    private fun initToolbar(toolbar : Toolbar) {
 
-        if(id == R.id.action_save) {
-            //todo onTaskAdded
+        toolbar.navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_close)
+
+        toolbar.setNavigationOnClickListener {
             dismiss()
-            return true
         }
 
-        return super.onOptionsItemSelected(item)
+        toolbar.inflateMenu(R.menu.menu_add_task)
+
+        toolbar.setOnMenuItemClickListener {item : MenuItem? ->
+            val id = item!!.itemId
+
+            var result = false
+
+            if(id == R.id.action_save) {
+                binding.viewModel?.save()
+                result = true
+            }
+
+            result
+        }
     }
 }

@@ -9,7 +9,7 @@ import org.joda.time.DateTime
 @Entity(tableName = TaskEntityDao.TABLE_NAME)
 data class TaskEntity(
 
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
         var id : Int,
         @ColumnInfo(name = "completed")
         val isComplete: Boolean,

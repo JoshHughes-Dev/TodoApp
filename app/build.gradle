@@ -41,7 +41,7 @@ dependencies {
     implementation 'com.android.support:design:26.1.0'
 
     /* Data binding (kotlin) */
-    kapt 'com.android.databinding:compiler:3.0.0'
+    kapt 'com.android.databinding:compiler:3.0.1'
 
     /* Dagger */
     compile "com.google.dagger:dagger:$dagger_version"

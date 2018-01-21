@@ -12,7 +12,7 @@ public class TaskRepository {
 
     private final TaskDataSource localDataSource;
 
-    private Map<String, Task> tasksMap;
+    private Map<String, Task> tasksMap = new LinkedHashMap<>();;
 
     public TaskRepository(TaskDataSource taskDataSource) {
         this.localDataSource = taskDataSource;
@@ -57,16 +57,19 @@ public class TaskRepository {
         }
     }
 
-    public void addTask(Task task) {
-        if(tasksMap == null) {
-            tasksMap = new LinkedHashMap<>();
-        }
-        tasksMap.put(String.valueOf(task.getId()), task);
-        localDataSource.saveTask(task);
+    public void addTask(String description) {
+
+        // TODO: 21/01/2018 insertTask using description
+        //wait for result (of full task model)
+        //add to local map
+        //return task or completed flag
+
+        //tasksMap.put(String.valueOf(task.getId()), task);
+        //localDataSource.saveTask(task);
     }
 
     public void completeTask(String taskId) {
-        if (tasksMap != null && tasksMap.containsKey(taskId)) {
+        if (tasksMap.containsKey(taskId)) {
             Task task = tasksMap.get(taskId);
             task.setComplete(true);
             tasksMap.put(taskId, task);
@@ -76,7 +79,7 @@ public class TaskRepository {
     }
 
     public void activateTask(String taskId) {
-        if (tasksMap != null && tasksMap.containsKey(taskId)) {
+        if (tasksMap.containsKey(taskId)) {
             Task task = tasksMap.get(taskId);
             task.setComplete(false);
             tasksMap.put(taskId, task);
@@ -86,17 +89,11 @@ public class TaskRepository {
     }
 
     public void clearTasks() {
-        if (tasksMap != null) {
-            tasksMap.clear();
-        }
+        tasksMap.clear();
         localDataSource.clearTasks();
     }
 
     private void refreshCache(List<Task> tasks) {
-        if (tasksMap == null) {
-            tasksMap = new LinkedHashMap<>();
-        }
-
         tasksMap.clear();
 
         for (Task task : tasks) {
