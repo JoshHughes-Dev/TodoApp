@@ -16,8 +16,12 @@ class AddTaskViewModel @Inject internal constructor(
     fun save() {
         //taskRepository.addTask(null)
 
-        taskRepository.addTask()
+        taskRepository.addTask(descriptionText.get(), TaskRepository.GetTaskCallback {
+            waaa()
+        })
+    }
 
+    private fun waaa() {
         dismissEvent.call()
     }
 }

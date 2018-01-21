@@ -57,15 +57,14 @@ public class TaskRepository {
         }
     }
 
-    public void addTask(String description) {
-
-        // TODO: 21/01/2018 insertTask using description
-        //wait for result (of full task model)
-        //add to local map
-        //return task or completed flag
-
-        //tasksMap.put(String.valueOf(task.getId()), task);
-        //localDataSource.saveTask(task);
+    public void addTask(String description, final GetTaskCallback callback) {
+        localDataSource.addTask(description, new GetTaskCallback() {
+            @Override
+            public void onComplete(Task task) {
+                tasksMap.put(String.valueOf(task.getId()), task);
+                callback.onComplete(task);
+            }
+        });
     }
 
     public void completeTask(String taskId) {

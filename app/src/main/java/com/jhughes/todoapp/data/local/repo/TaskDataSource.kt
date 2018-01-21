@@ -5,6 +5,7 @@ import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.data.local.dao.TaskEntityDao
 import com.jhughes.todoapp.data.local.mapper.TaskMapper
 import com.jhughes.todoapp.data.util.AppExecutors
+import org.joda.time.DateTime
 
 class TaskDataSource(
         private val taskEntityDao: TaskEntityDao,
@@ -41,9 +42,14 @@ class TaskDataSource(
         appExecutors.diskIO().execute(runnable)
     }
 
-    fun saveTask(task: Task) {
+    fun addTask(description : String, callback: TaskRepository.GetTaskCallback) {
+
+        var task = Task(0, false, description, DateTime.now())
+
         val runnable = Runnable {
-            taskEntityDao.insertTask(taskMapper.toEntity(task))
+            val id = taskEntityDao.insertTask(taskMapper.toEntity(task))
+            val taskEntity = taskEntityDao.findTaskById(id.toInt())
+            callback.onComplete(taskMapper.toDomain(taskEntity))
         }
 
         appExecutors.diskIO().execute(runnable)
