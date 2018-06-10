@@ -30,27 +30,27 @@ class TaskAdapter(private val application : Application, private val taskReposit
         return tasks.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): DataBindingViewHolder<RowTaskItemBinding> {
-        val inflater = LayoutInflater.from(parent?.context)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBindingViewHolder<RowTaskItemBinding> {
+        val inflater = LayoutInflater.from(parent.context)
         val binding = RowTaskItemBinding.inflate(inflater, parent, false)
 
         return DataBindingViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: DataBindingViewHolder<RowTaskItemBinding>?, position: Int) {
-        var task = tasks[position]
+    override fun onBindViewHolder(holder: DataBindingViewHolder<RowTaskItemBinding>, position: Int) {
+        val task = tasks[position]
         val viewModel = TaskRowViewModel(application, task)
 
         viewModel.listener = this
 
-        holder?.binding?.viewModel = viewModel
-        holder?.binding?.executePendingBindings()
+        holder.binding.viewModel = viewModel
+        holder.binding.executePendingBindings()
     }
 
-    override fun onViewDetachedFromWindow(holder: DataBindingViewHolder<RowTaskItemBinding>?) {
+    override fun onViewDetachedFromWindow(holder: DataBindingViewHolder<RowTaskItemBinding>) {
         super.onViewDetachedFromWindow(holder)
 
-        holder?.binding?.viewModel?.listener = null
+        holder.binding.viewModel?.listener = null
     }
 
     override fun onStatusChange(taskId: String, isComplete: Boolean) {

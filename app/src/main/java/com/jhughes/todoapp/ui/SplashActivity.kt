@@ -8,32 +8,28 @@ import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import com.jhughes.todoapp.TodoApplication
 import com.jhughes.todoapp.data.Navigator
 import com.jhughes.todoapp.databinding.ActivitySplashBinding
-import com.jhughes.todoapp.injection.component.DaggerSplashActivityComponent
-import com.jhughes.todoapp.injection.component.SplashActivityComponent
-import com.jhughes.todoapp.injection.module.SplashActivityModule
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
 
 
 class SplashActivity : AppCompatActivity() {
 
-    private lateinit var component: SplashActivityComponent
     private lateinit var binding: ActivitySplashBinding
     private lateinit var viewModel: SplashViewModel
 
-    @Inject lateinit var viewModelFactory: SplashViewModelFactory
+    @Inject
+    lateinit var viewModelFactory: SplashViewModelFactory
 
     private var hasPerformedTransition = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-
-        setUpInjection()
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
 
@@ -61,17 +57,6 @@ class SplashActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         lifecycle.removeObserver(binding.viewModel as LifecycleObserver)
-    }
-
-    private fun setUpInjection() {
-        val todoApp = application as TodoApplication
-
-        component = DaggerSplashActivityComponent.builder()
-                .splashActivityModule(SplashActivityModule(this))
-                .applicationComponent(todoApp.component)
-                .build()
-
-        component.inject(this)
     }
 
     private fun handleNavigationEvent(navigator: Navigator?) {

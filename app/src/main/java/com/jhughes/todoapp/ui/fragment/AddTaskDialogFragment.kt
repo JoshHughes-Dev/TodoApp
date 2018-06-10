@@ -3,27 +3,29 @@ package com.jhughes.todoapp.ui.fragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatDialogFragment
 import android.support.v7.widget.Toolbar
 import android.view.*
 import com.jhughes.todoapp.R
-import com.jhughes.todoapp.TodoApplication
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
-import com.jhughes.todoapp.injection.component.AddTaskFragmentComponent
-import com.jhughes.todoapp.injection.component.DaggerAddTaskFragmentComponent
-import com.jhughes.todoapp.injection.module.AddTaskFragmentModule
 import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.AddTaskViewModelFactory
+import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class AddTaskDialogFragment : DialogFragment() {
+class AddTaskDialogFragment : AppCompatDialogFragment() {
 
-    private lateinit var component : AddTaskFragmentComponent
     private lateinit var binding : FragmentAddTaskBinding
 
-    @Inject lateinit var viewModelFactory: AddTaskViewModelFactory
+    @Inject
+    lateinit var connectivityManager: ConnectivityManager
+
+    @Inject
+    lateinit var viewModelFactory: AddTaskViewModelFactory
 
     private lateinit var onActionListener : OnActionListener
 
@@ -41,6 +43,7 @@ class AddTaskDialogFragment : DialogFragment() {
     }
 
     override fun onAttach(context: Context?) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         try {
             onActionListener = context as OnActionListener
@@ -52,20 +55,11 @@ class AddTaskDialogFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
-
-        component = DaggerAddTaskFragmentComponent.builder()
-                .addTaskFragmentModule(AddTaskFragmentModule(activity))
-                .applicationComponent((activity.application as TodoApplication).component)
-                .build()
-
-        component.inject(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentAddTaskBinding.inflate(inflater!!, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = FragmentAddTaskBinding.inflate(inflater, container, false)
 
         binding.viewModel = ViewModelProviders.of(this, viewModelFactory)
                 .get(AddTaskViewModel::class.java)
@@ -87,7 +81,7 @@ class AddTaskDialogFragment : DialogFragment() {
 
     private fun initToolbar(toolbar : Toolbar) {
 
-        toolbar.navigationIcon = ContextCompat.getDrawable(context, R.drawable.ic_close)
+        toolbar.navigationIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_close)
 
         toolbar.setNavigationOnClickListener {
             dismiss()
@@ -109,7 +103,7 @@ class AddTaskDialogFragment : DialogFragment() {
         }
     }
 
-    public interface OnActionListener {
+    interface OnActionListener {
         fun onTaskAdded()
     }
 }
