@@ -3,7 +3,6 @@ package com.jhughes.todoapp.ui.fragment
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v4.content.ContextCompat
@@ -12,6 +11,9 @@ import android.support.v7.widget.Toolbar
 import android.view.*
 import com.jhughes.todoapp.R
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
+import com.jhughes.todoapp.injection.scopedItems.ActivityItem
+import com.jhughes.todoapp.injection.scopedItems.FragmentItem
+import com.jhughes.todoapp.injection.scopedItems.SingletonItem
 import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.AddTaskViewModelFactory
 import dagger.android.support.AndroidSupportInjection
@@ -21,8 +23,9 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
 
     private lateinit var binding : FragmentAddTaskBinding
 
-    @Inject
-    lateinit var connectivityManager: ConnectivityManager
+    @Inject lateinit var singletonItem: SingletonItem
+    @Inject lateinit var activityItem: ActivityItem
+    @Inject lateinit var fragmentItem: FragmentItem
 
     @Inject
     lateinit var viewModelFactory: AddTaskViewModelFactory
