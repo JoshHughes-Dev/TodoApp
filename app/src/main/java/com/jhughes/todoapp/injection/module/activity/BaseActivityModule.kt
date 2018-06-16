@@ -6,8 +6,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class BaseModule {
-
+class BaseActivityModule {
     @Provides
     @ActivityScope
     fun provideBaseActivityItem() : BaseActivityItem {

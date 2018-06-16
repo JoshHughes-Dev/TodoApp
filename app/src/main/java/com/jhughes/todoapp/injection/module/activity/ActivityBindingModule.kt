@@ -10,10 +10,10 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBindingModule {
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [SplashModule::class])
+    @ContributesAndroidInjector(modules = [SplashActivityModule::class])
     abstract fun splashActivity() : SplashActivity
 
     @ActivityScope
-    @ContributesAndroidInjector(modules = [MainModule::class])
+    @ContributesAndroidInjector(modules = [MainActivityModule::class])
     abstract fun mainActivity() : MainActivity
 }

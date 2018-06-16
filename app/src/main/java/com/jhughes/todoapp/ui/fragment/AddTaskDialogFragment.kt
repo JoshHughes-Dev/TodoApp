@@ -12,6 +12,7 @@ import android.view.*
 import com.jhughes.todoapp.R
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
 import com.jhughes.todoapp.injection.scopedItems.ActivityItem
+import com.jhughes.todoapp.injection.scopedItems.BaseActivityItem
 import com.jhughes.todoapp.injection.scopedItems.FragmentItem
 import com.jhughes.todoapp.injection.scopedItems.SingletonItem
 import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
@@ -24,6 +25,7 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
     private lateinit var binding : FragmentAddTaskBinding
 
     @Inject lateinit var singletonItem: SingletonItem
+    @Inject lateinit var baseActivityItem: BaseActivityItem
     @Inject lateinit var activityItem: ActivityItem
     @Inject lateinit var fragmentItem: FragmentItem
 

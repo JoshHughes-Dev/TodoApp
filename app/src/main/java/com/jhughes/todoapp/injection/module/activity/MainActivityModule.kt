@@ -16,8 +16,8 @@ import dagger.android.ContributesAndroidInjector
 //module has to be abstract to contribute injector. but means providers have to be static (in java)
 // which converts to some nasty kotlin code
 
-@Module(includes = [BaseModule::class])
-abstract class MainModule {
+@Module(includes = [BaseActivityModule::class])
+abstract class MainActivityModule {
 
     @FragmentScope
     @ContributesAndroidInjector(modules = [AddTaskModule::class])

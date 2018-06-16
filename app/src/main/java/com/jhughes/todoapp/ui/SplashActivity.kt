@@ -11,7 +11,6 @@ import com.jhughes.todoapp.data.Navigator
 import com.jhughes.todoapp.databinding.ActivitySplashBinding
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
-import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
 
@@ -27,7 +26,6 @@ class SplashActivity : BaseActivity() {
     private var hasPerformedTransition = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)

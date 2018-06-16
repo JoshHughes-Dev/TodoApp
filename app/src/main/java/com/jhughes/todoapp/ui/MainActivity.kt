@@ -11,7 +11,6 @@ import com.jhughes.todoapp.injection.scopedItems.SingletonItem
 import com.jhughes.todoapp.ui.fragment.AddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.MainViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.MainViewModelFactory
-import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener {
@@ -31,7 +30,6 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
