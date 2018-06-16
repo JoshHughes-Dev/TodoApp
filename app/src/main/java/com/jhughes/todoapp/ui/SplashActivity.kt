@@ -12,12 +12,11 @@ import com.jhughes.todoapp.databinding.ActivitySplashBinding
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
 import dagger.android.AndroidInjection
-import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
 
 
-class SplashActivity : DaggerAppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySplashBinding
     private lateinit var viewModel: SplashViewModel

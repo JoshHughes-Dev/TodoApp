@@ -1,7 +1,6 @@
 package com.jhughes.todoapp.injection.component.app
 
 import android.app.Application
-import android.net.ConnectivityManager
 import com.jhughes.todoapp.TodoApplication
 import com.jhughes.todoapp.injection.module.activity.ActivityBindingModule
 import com.jhughes.todoapp.injection.module.app.TodoApplicationModule
@@ -20,8 +19,6 @@ import javax.inject.Singleton
     AndroidSupportInjectionModule::class,
     ActivityBindingModule::class])
 interface TodoApplicationComponent : AndroidInjector<TodoApplication> {
-
-    fun connectivityManager(): ConnectivityManager
 
     @Component.Builder
     interface Builder {

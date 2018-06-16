@@ -7,10 +7,9 @@ import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
 import dagger.Module
 import dagger.Provides
 
-
 //module doesnt contain any abstract android injectors, doesnt need to be abstract
 
-@Module
+@Module(includes = [BaseModule::class])
 class SplashModule {
 
     @Provides

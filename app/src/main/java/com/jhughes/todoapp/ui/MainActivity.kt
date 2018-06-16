@@ -12,10 +12,9 @@ import com.jhughes.todoapp.ui.fragment.AddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.MainViewModel
 import com.jhughes.todoapp.ui.viewModel.factory.MainViewModelFactory
 import dagger.android.AndroidInjection
-import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
-class MainActivity : DaggerAppCompatActivity(), AddTaskDialogFragment.OnActionListener {
+class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener {
 
     private lateinit var binding : ActivityMainBinding
     private lateinit var viewModel: MainViewModel
