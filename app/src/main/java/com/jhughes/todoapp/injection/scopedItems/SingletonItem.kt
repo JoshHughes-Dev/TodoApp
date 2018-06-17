@@ -1,4 +1,5 @@
 package com.jhughes.todoapp.injection.scopedItems
 
-class SingletonItem {
+open class SingletonItem {
+    open val itemDescription = "singletonItem"
 }

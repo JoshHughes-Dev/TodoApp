@@ -5,6 +5,20 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('../debug.keystore')
+            storePassword 'android'
+        }
+        release {
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+            storeFile file('../debug.keystore')
+            storePassword 'android'
+        }
+    }
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
 
@@ -21,8 +35,16 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            minifyEnabled true
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            applicationIdSuffix ".debug"
+            debuggable true
+
+            signingConfig signingConfigs.debug
         }
     }
 
@@ -33,24 +55,25 @@ android {
     kapt {
         generateStubs = true
     }
+    sourceSets {
+        debug { java.srcDirs = ['src/debug/java', 'src/debug/java/'] }
+        release { java.srcDirs = ['src/release/java', 'src/release/java/'] }
+    }
 }
 
 dependencies {
-
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.1.1'
-
     implementation 'com.android.support:design:27.1.1'
-
     /* Dagger */
     implementation "com.google.dagger:dagger:$dagger_version"
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
     /* Dagger android */
     implementation "com.google.dagger:dagger-android:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version" // if you use the support libraries
+    implementation "com.google.dagger:dagger-android-support:$dagger_version"
+    // if you use the support libraries
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-
     /* Lifecycle components */
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     kapt "android.arch.lifecycle:compiler:$lifecycle_version"
@@ -58,11 +81,8 @@ dependencies {
     implementation "android.arch.persistence.room:rxjava2:$room_version"
     implementation "android.arch.persistence.room:runtime:$room_version"
     kapt "android.arch.persistence.room:compiler:$room_version"
-
     implementation 'net.danlew:android.joda:2.9.9.1'
-
     testImplementation 'junit:junit:4.12'
-
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

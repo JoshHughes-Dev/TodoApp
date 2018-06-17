@@ -1,6 +1,7 @@
 package com.jhughes.todoapp.injection.module.app
 
 import com.jhughes.todoapp.data.util.AppExecutors
+import com.jhughes.todoapp.injection.scopedItems.DebugSingletonItem
 import com.jhughes.todoapp.injection.scopedItems.SingletonItem
 import dagger.Module
 import dagger.Provides
@@ -11,12 +12,12 @@ import javax.inject.Singleton
     DataBaseModule::class,
     RepositoryModule::class
 ])
-class TodoApplicationModule {
+class DebugTodoApplicationModule  {
 
     @Provides
     @Singleton
     fun provideSingletonItem(): SingletonItem {
-        return SingletonItem()
+        return DebugSingletonItem()
     }
 
     @Provides

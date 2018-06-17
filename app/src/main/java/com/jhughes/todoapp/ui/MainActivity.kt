@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.jhughes.todoapp.databinding.ActivityMainBinding
 import com.jhughes.todoapp.injection.scopedItems.ActivityItem
 import com.jhughes.todoapp.injection.scopedItems.SingletonItem
@@ -45,7 +46,11 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener {
         viewModel.navigationEvent.observe(this, Observer {
             openAddTask()
         })
+    }
 
+    override fun onStart() {
+        super.onStart()
+        Toast.makeText(this, singletonItem.itemDescription, Toast.LENGTH_LONG).show()
     }
 
     override fun onTaskAdded() {

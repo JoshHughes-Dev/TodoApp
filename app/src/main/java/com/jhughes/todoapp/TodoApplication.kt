@@ -1,31 +1,16 @@
 package com.jhughes.todoapp
 
-import android.app.Activity
-import android.app.Application
-import android.net.ConnectivityManager
-import com.jhughes.todoapp.injection.component.app.DaggerTodoApplicationComponent
+import com.jhughes.todoapp.injection.ComponentFactory
+import com.jhughes.todoapp.injection.scopedItems.SingletonItem
 import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.DaggerApplication
 import javax.inject.Inject
 
-class TodoApplication : Application(), HasActivityInjector {
+class TodoApplication : DaggerApplication() {
 
-    @Inject
-    lateinit var dispatchingActivityInjector: DispatchingAndroidInjector<Activity>
+    @Inject lateinit var singletonItem: SingletonItem
 
-    @Inject lateinit var connectivityManager: ConnectivityManager
-
-    override fun onCreate() {
-        super.onCreate()
-        DaggerTodoApplicationComponent
-                .builder()
-                .application(this)
-                .build()
-                .inject(this)
-    }
-
-    override fun activityInjector(): AndroidInjector<Activity> {
-        return dispatchingActivityInjector
+    override fun applicationInjector(): AndroidInjector<out DaggerApplication> {
+        return ComponentFactory.buildComponentFor(this)
     }
 }

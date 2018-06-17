@@ -1,4 +1,5 @@
 package com.jhughes.todoapp.injection.scopedItems
 
-class BaseActivityItem {
+open class BaseActivityItem {
+    open val itemDescription = "baseActivityItem"
 }

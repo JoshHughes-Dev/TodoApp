@@ -9,7 +9,7 @@ import dagger.Provides
 
 //module doesnt contain any abstract android injectors, doesnt need to be abstract
 
-@Module(includes = [BaseActivityModule::class])
+@Module(includes = [ActivityModule::class])
 class SplashActivityModule {
 
     @Provides
