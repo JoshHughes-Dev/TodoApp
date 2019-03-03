@@ -1,16 +1,13 @@
 package com.jhughes.todoapp.ui
 
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
-import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
 import android.util.Log
-import com.jhughes.todoapp.data.Navigator
+import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.databinding.ActivitySplashBinding
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
-import com.jhughes.todoapp.ui.viewModel.factory.SplashViewModelFactory
+import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
 
@@ -20,8 +17,7 @@ class SplashActivity : BaseActivity() {
     private lateinit var binding: ActivitySplashBinding
     private lateinit var viewModel: SplashViewModel
 
-    @Inject
-    lateinit var viewModelFactory: SplashViewModelFactory
+    @Inject lateinit var factory: ViewModelProvider.Factory
 
     private var hasPerformedTransition = false
 
@@ -30,16 +26,15 @@ class SplashActivity : BaseActivity() {
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(SplashViewModel::class.java)
+        viewModel = viewModelProvider(factory)
 
         binding.viewModel = viewModel
 
         setContentView(binding.root)
 
-        viewModel.navigationEvent.observe(this, Observer<Navigator>({ navigator ->
-            handleNavigationEvent(navigator)
-        }))
+//        viewModel.navigationEvent.observe(this, Observer<Navigator> { navigator ->
+//            handleNavigationEvent(navigator)
+//        })
 
         lifecycle.addObserver(binding.viewModel as LifecycleObserver)
     }
@@ -56,37 +51,37 @@ class SplashActivity : BaseActivity() {
         lifecycle.removeObserver(binding.viewModel as LifecycleObserver)
     }
 
-    private fun handleNavigationEvent(navigator: Navigator?) {
+//    private fun handleNavigationEvent(navigator: Navigator?) {
+//
+//        if (navigator == null) {
+//            return
+//        }
+//
+//        if (navigator.startActivity != null) {
+//            val intent = Intent(this, navigator.startActivity)
+//            if (navigator.bundle != null) {
+//                intent.putExtras(navigator.bundle)
+//            }
+//            if (navigator.requestCode > -1) {
+//                startActivityForResult(intent, navigator.requestCode)
+//            } else {
+//                startActivity(intent)
+//            }
+//        } else if (navigator.key != null) {
+//            handleNavigationKeyEvent(navigator)
+//        }
+//
+//        if (navigator.isFinishActivity) {
+//            //normally finish but here do something different
+//            hasPerformedTransition = true
+//        }
+//    }
 
-        if (navigator == null) {
-            return
-        }
-
-        if (navigator.startActivity != null) {
-            val intent = Intent(this, navigator.startActivity)
-            if (navigator.bundle != null) {
-                intent.putExtras(navigator.bundle)
-            }
-            if (navigator.requestCode > -1) {
-                startActivityForResult(intent, navigator.requestCode)
-            } else {
-                startActivity(intent)
-            }
-        } else if (navigator.key != null) {
-            handleNavigationKeyEvent(navigator)
-        }
-
-        if (navigator.isFinishActivity) {
-            //normally finish but here do something different
-            hasPerformedTransition = true
-        }
-    }
-
-    private fun handleNavigationKeyEvent(navigator: Navigator) {
-        if (navigator.key == SplashViewModel.KEY_OPEN_MAIN) {
-            onOpenMain()
-        }
-    }
+//    private fun handleNavigationKeyEvent(navigator: Navigator) {
+//        if (navigator.key == SplashViewModel.KEY_OPEN_MAIN) {
+//            onOpenMain()
+//        }
+//    }
 
     private fun onOpenMain() {
         Log.d("Navigate", "openMainMenu")

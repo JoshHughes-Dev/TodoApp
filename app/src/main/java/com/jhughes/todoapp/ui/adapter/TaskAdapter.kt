@@ -1,15 +1,14 @@
 package com.jhughes.todoapp.ui.adapter
 
-import android.app.Application
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.databinding.RowTaskItemBinding
 import com.jhughes.todoapp.ui.viewModel.TaskRowViewModel
 
-class TaskAdapter(private val application : Application, private val taskRepository: TaskRepository)
+class TaskAdapter(private val taskRepository: TaskRepository)
     : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBinding>>(),
         TaskRowViewModel.OnActionListener {
 
@@ -39,7 +38,7 @@ class TaskAdapter(private val application : Application, private val taskReposit
 
     override fun onBindViewHolder(holder: DataBindingViewHolder<RowTaskItemBinding>, position: Int) {
         val task = tasks[position]
-        val viewModel = TaskRowViewModel(application, task)
+        val viewModel = TaskRowViewModel(task)
 
         viewModel.listener = this
 

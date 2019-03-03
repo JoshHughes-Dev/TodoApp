@@ -1,22 +1,16 @@
 package com.jhughes.todoapp.ui.fragment
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.content.ContextCompat
-import android.support.v7.app.AppCompatDialogFragment
-import android.support.v7.widget.Toolbar
 import android.view.*
+import androidx.appcompat.app.AppCompatDialogFragment
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.R
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
-import com.jhughes.todoapp.injection.scopedItems.ActivityItem
-import com.jhughes.todoapp.injection.scopedItems.BaseActivityItem
-import com.jhughes.todoapp.injection.scopedItems.FragmentItem
-import com.jhughes.todoapp.injection.scopedItems.SingletonItem
-import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
-import com.jhughes.todoapp.ui.viewModel.factory.AddTaskViewModelFactory
+import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
@@ -24,13 +18,7 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
 
     private lateinit var binding : FragmentAddTaskBinding
 
-    @Inject lateinit var singletonItem: SingletonItem
-    @Inject lateinit var baseActivityItem: BaseActivityItem
-    @Inject lateinit var activityItem: ActivityItem
-    @Inject lateinit var fragmentItem: FragmentItem
-
-    @Inject
-    lateinit var viewModelFactory: AddTaskViewModelFactory
+    @Inject lateinit var factory: ViewModelProvider.Factory
 
     private lateinit var onActionListener : OnActionListener
 
@@ -66,13 +54,12 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
 
-        binding.viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(AddTaskViewModel::class.java)
+        binding.viewModel = viewModelProvider(factory)
 
-        binding.viewModel?.dismissEvent?.observe(this, Observer<Void>({
-            onActionListener.onTaskAdded()
-            dismiss()
-        }))
+//        binding.viewModel?.dismissEvent?.observe(this, Observer<Void>{
+//            onActionListener.onTaskAdded()
+//            dismiss()
+//        })
 
         initToolbar(binding.toolbar)
 

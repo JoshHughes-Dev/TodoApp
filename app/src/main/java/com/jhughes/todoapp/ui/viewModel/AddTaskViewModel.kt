@@ -1,19 +1,18 @@
 package com.jhughes.todoapp.ui.viewModel
 
 import android.app.Application
-import android.databinding.Bindable
-import android.databinding.ObservableField
+import androidx.databinding.Bindable
+import androidx.databinding.ObservableField
 import com.jhughes.todoapp.BR
-import com.jhughes.todoapp.SingleLiveEvent
 import com.jhughes.todoapp.data.domain.repo.TaskRepository
+import javax.inject.Inject
 
-class AddTaskViewModel constructor(
+class AddTaskViewModel @Inject constructor(
         application: Application,
-        private val taskRepository: TaskRepository) : BaseViewModel(application) {
+        private val taskRepository: TaskRepository) : ArchViewModel() {
 
     val descriptionText : ObservableField<String> = ObservableField()
 
-    val dismissEvent = SingleLiveEvent<Void>()
 
     @Bindable
     fun getError() : Boolean {
@@ -27,7 +26,7 @@ class AddTaskViewModel constructor(
             notifyPropertyChanged(BR.error)
         } else {
             taskRepository.addTask(descriptionText.get(), TaskRepository.GetTaskCallback {
-                dismissEvent.postValue(null)
+
             })
         }
     }

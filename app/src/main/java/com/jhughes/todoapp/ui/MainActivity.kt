@@ -1,17 +1,13 @@
 package com.jhughes.todoapp.ui
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.databinding.ActivityMainBinding
-import com.jhughes.todoapp.injection.scopedItems.ActivityItem
-import com.jhughes.todoapp.injection.scopedItems.SingletonItem
 import com.jhughes.todoapp.ui.fragment.AddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.MainViewModel
-import com.jhughes.todoapp.ui.viewModel.factory.MainViewModelFactory
+import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import javax.inject.Inject
 
 class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener {
@@ -19,10 +15,7 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener {
     private lateinit var binding : ActivityMainBinding
     private lateinit var viewModel: MainViewModel
 
-    @Inject lateinit var singletonItem: SingletonItem
-    @Inject lateinit var activityItem: ActivityItem
-
-    @Inject lateinit var viewModelFactory: MainViewModelFactory
+    @Inject lateinit var factory: ViewModelProvider.Factory
 
     companion object Factory {
         fun getStartIntent(context: Context): Intent {
@@ -35,22 +28,16 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
 
-        viewModel = ViewModelProviders.of(this, viewModelFactory)
-                .get(MainViewModel::class.java)
+        viewModel = viewModelProvider(factory)
 
         binding.viewModel = viewModel
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        viewModel.navigationEvent.observe(this, Observer {
-            openAddTask()
-        })
-    }
-
-    override fun onStart() {
-        super.onStart()
-        Toast.makeText(this, singletonItem.itemDescription, Toast.LENGTH_LONG).show()
+//        viewModel.navigationEvent.observe(this, Observer {
+//            openAddTask()
+//        })
     }
 
     override fun onTaskAdded() {

@@ -1,12 +1,11 @@
 package com.jhughes.todoapp.ui.viewModel
 
-import android.app.Application
-import android.databinding.Bindable
-import android.databinding.Observable
-import android.databinding.ObservableBoolean
+import androidx.databinding.Bindable
+import androidx.databinding.Observable
+import androidx.databinding.ObservableBoolean
 import com.jhughes.todoapp.data.domain.model.Task
 
-class TaskRowViewModel(application: Application, private val task: Task) : BaseViewModel(application) {
+class TaskRowViewModel(private val task: Task) : ArchViewModel() {
 
     val isComplete = ObservableBoolean(task.isComplete)
     var listener : OnActionListener? = null

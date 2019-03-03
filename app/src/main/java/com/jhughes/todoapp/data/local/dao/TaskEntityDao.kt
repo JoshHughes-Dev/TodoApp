@@ -1,7 +1,7 @@
 package com.jhughes.todoapp.data.local.dao
 
-import android.arch.persistence.room.*
-import android.arch.persistence.room.OnConflictStrategy.REPLACE
+import androidx.room.*
+import androidx.room.OnConflictStrategy.REPLACE
 import com.jhughes.todoapp.data.local.entity.TaskEntity
 
 

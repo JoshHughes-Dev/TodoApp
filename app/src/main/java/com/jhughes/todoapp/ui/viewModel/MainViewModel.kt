@@ -1,23 +1,20 @@
 package com.jhughes.todoapp.ui.viewModel
 
 import android.app.Application
-import android.databinding.Bindable
 import android.net.ConnectivityManager
-import com.jhughes.todoapp.SingleLiveEvent
-import com.jhughes.todoapp.data.Navigator
+import androidx.databinding.Bindable
 import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.ui.adapter.TaskAdapter
 import javax.inject.Inject
 
 
-class MainViewModel @Inject internal constructor(
+class MainViewModel @Inject constructor(
         application: Application,
         private val connectivityManager: ConnectivityManager,
-        private val taskRepository: TaskRepository) : BaseViewModel(application) {
+        private val taskRepository: TaskRepository) : ArchViewModel() {
 
-    private val adapter = TaskAdapter(application, taskRepository)
+    private val adapter = TaskAdapter(taskRepository)
 
-    val navigationEvent = SingleLiveEvent<Navigator>()
 
     init {
         setTasks()
@@ -29,12 +26,12 @@ class MainViewModel @Inject internal constructor(
     }
 
     fun fabClick() {
-        navigationEvent.call()
+//        navigationEvent.call()
     }
 
     fun setTasks() {
-        taskRepository.getTasks(TaskRepository.GetTasksCallback {
+        taskRepository.getTasks {
             tasks ->  adapter.addTasks(tasks)
-        })
+        }
     }
 }
