@@ -4,6 +4,7 @@ import androidx.databinding.Bindable
 import androidx.lifecycle.MutableLiveData
 import com.jhughes.todoapp.BR
 import com.jhughes.todoapp.data.domain.repo.TaskRepository
+import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import javax.inject.Inject
 
 class AddTaskViewModel @Inject constructor(
@@ -25,8 +26,12 @@ class AddTaskViewModel @Inject constructor(
             notifyPropertyChanged(BR.error)
         } else {
             taskRepository.addTask(value) {
-
+                navigate(Nav.AddedTask)
             }
         }
+    }
+
+    class Nav {
+        object AddedTask : NavigationRequest()
     }
 }

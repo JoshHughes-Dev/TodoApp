@@ -8,8 +8,10 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.R
+import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
 import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
+import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
@@ -48,11 +50,6 @@ class AddTaskDialogFragment : BaseDialogFragment() {
 
         binding.viewModel = viewModel
 
-//        binding.viewModel?.dismissEvent?.observe(this, Observer<Void>{
-//            onActionListener.onTaskAdded()
-//            dismiss()
-//        })
-
         initToolbar(binding.toolbar)
 
         return binding.root
@@ -84,6 +81,16 @@ class AddTaskDialogFragment : BaseDialogFragment() {
             }
 
             result
+        }
+    }
+
+    override fun handleNavigationRequest(request: NavigationRequest): Boolean {
+        return when(request) {
+            AddTaskViewModel.Nav.AddedTask -> consume {
+                onActionListener.onTaskAdded()
+                dismiss()
+            }
+            else -> super.handleNavigationRequest(request)
         }
     }
 

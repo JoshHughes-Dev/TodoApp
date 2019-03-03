@@ -42,9 +42,9 @@ class SplashActivity : BaseActivity() {
 
     override fun onStop() {
         super.onStop()
-        if (hasPerformedTransition) {
-            finish()
-        }
+//        if (hasPerformedTransition) {
+//            finish()
+//        }
     }
 
     override fun handleNavigationRequest(request: NavigationRequest): Boolean {
@@ -54,7 +54,8 @@ class SplashActivity : BaseActivity() {
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, splash_icon, "splash")
 
                 startActivity(intent, options.toBundle())
-                hasPerformedTransition = true
+                //hasPerformedTransition = true
+                finish()
             }
             else -> super.handleNavigationRequest(request)
         }

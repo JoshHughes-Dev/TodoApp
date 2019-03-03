@@ -3,16 +3,15 @@ package com.jhughes.todoapp.data.local.repo
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.local.dao.TaskEntityDao
 import com.jhughes.todoapp.data.local.mapper.TaskMapper
-import com.jhughes.todoapp.data.util.AppExecutors
+import com.jhughes.todoapp.util.IoScheduler
 import org.joda.time.DateTime
 
 class TaskDataSource(
         private val taskEntityDao: TaskEntityDao,
-        private val appExecutors: AppExecutors,
         private val taskMapper: TaskMapper) {
 
     fun getTasks(callback: (List<Task>) -> Unit) {
-        appExecutors.diskIO().execute {
+        IoScheduler.execute {
             val taskEntities = taskEntityDao.getAllTasks()
             val tasks = ArrayList<Task>()
 
@@ -20,18 +19,18 @@ class TaskDataSource(
                 tasks.add(taskMapper.toDomain(it))
             }
 
-            appExecutors.mainThread().execute{
+            IoScheduler.postToMainThread {
                 callback(tasks)
             }
         }
     }
 
     fun getTask(taskId: Int, callback: (Task) -> Unit) {
-        appExecutors.diskIO().execute {
+        IoScheduler.execute {
             val taskEntity = taskEntityDao.findTaskById(taskId)
             val task = taskMapper.toDomain(taskEntity)
 
-            appExecutors.mainThread().execute{
+            IoScheduler.postToMainThread {
                 callback(task)
             }
         }
@@ -40,10 +39,12 @@ class TaskDataSource(
     fun addTask(description : String, callback: (Task) -> Unit) {
         val task = Task(0, false, description, DateTime.now())
 
-        appExecutors.diskIO().execute {
+        IoScheduler.execute {
             val id = taskEntityDao.insertTask(taskMapper.toEntity(task))
             val taskEntity = taskEntityDao.findTaskById(id.toInt())
-            callback(taskMapper.toDomain(taskEntity))
+            IoScheduler.postToMainThread {
+                callback(taskMapper.toDomain(taskEntity))
+            }
         }
     }
 
@@ -56,7 +57,7 @@ class TaskDataSource(
     }
 
     fun clearTasks() {
-        appExecutors.diskIO().execute {
+        IoScheduler.execute {
             taskEntityDao.deleteAll()
         }
     }
@@ -64,7 +65,7 @@ class TaskDataSource(
     private fun changeTaskStatus(task: Task, status: Boolean) {
         val taskEntity = taskMapper.toEntity(task)
 
-        appExecutors.diskIO().execute {
+        IoScheduler.execute {
             taskEntityDao.updateCompleted(taskEntity.id, status)
         }
     }
