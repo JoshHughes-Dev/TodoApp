@@ -11,9 +11,6 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 
-//module has to be abstract to contribute injector. but means providers have to be static (in java)
-// which converts to some nasty kotlin code
-
 @Module(includes = [ActivityModule::class])
 abstract class MainActivityModule {
 

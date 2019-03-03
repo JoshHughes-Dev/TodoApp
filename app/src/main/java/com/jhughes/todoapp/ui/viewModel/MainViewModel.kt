@@ -1,37 +1,32 @@
 package com.jhughes.todoapp.ui.viewModel
 
-import android.app.Application
-import android.net.ConnectivityManager
-import androidx.databinding.Bindable
+import androidx.lifecycle.MutableLiveData
+import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.domain.repo.TaskRepository
-import com.jhughes.todoapp.ui.adapter.TaskAdapter
+import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import javax.inject.Inject
 
 
 class MainViewModel @Inject constructor(
-        application: Application,
-        private val connectivityManager: ConnectivityManager,
-        private val taskRepository: TaskRepository) : ArchViewModel() {
+        val taskRepository: TaskRepository) : ArchViewModel() {
 
-    private val adapter = TaskAdapter(taskRepository)
-
+    val tasks : MutableLiveData<List<Task>> = MutableLiveData()
 
     init {
-        setTasks()
-    }
-
-    @Bindable
-    fun getAdapter(): TaskAdapter {
-        return adapter
+        refreshData()
     }
 
     fun fabClick() {
-//        navigationEvent.call()
+        navigate(Nav.AddNewTask)
     }
 
-    fun setTasks() {
+    fun refreshData() {
         taskRepository.getTasks {
-            tasks ->  adapter.addTasks(tasks)
+            this.tasks.value = it
         }
+    }
+
+    class Nav {
+        object AddNewTask : NavigationRequest()
     }
 }

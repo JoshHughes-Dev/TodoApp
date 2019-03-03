@@ -1,29 +1,21 @@
 package com.jhughes.todoapp.ui.viewModel
 
 import android.util.Log
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleObserver
-import androidx.lifecycle.OnLifecycleEvent
 import com.jhughes.todoapp.data.util.AppExecutors
+import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import javax.inject.Inject
 
 class SplashViewModel @Inject constructor(
-        private val appExecutors: AppExecutors) : ArchViewModel(), LifecycleObserver {
+        private val appExecutors: AppExecutors) : ArchViewModel() {
 
-    companion object {
-        val KEY_OPEN_MAIN = "key_splash_open_main"
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun startMain() {
         appExecutors.mainThreadHandler().postDelayed({
             Log.d("Navigate", "called navigator")
-            splashCompleteEvent()
+            navigate(Nav.FinishSplash)
         }, 1500)
     }
 
-    private fun splashCompleteEvent() {
-
+    class Nav {
+        object FinishSplash : NavigationRequest()
     }
-
 }

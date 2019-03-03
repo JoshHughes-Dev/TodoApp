@@ -3,37 +3,25 @@ package com.jhughes.todoapp.ui.fragment
 import android.content.Context
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AppCompatDialogFragment
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.R
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
+import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class AddTaskDialogFragment : AppCompatDialogFragment() {
+class AddTaskDialogFragment : BaseDialogFragment() {
 
     private lateinit var binding : FragmentAddTaskBinding
+    private lateinit var viewModel : AddTaskViewModel
 
     @Inject lateinit var factory: ViewModelProvider.Factory
 
     private lateinit var onActionListener : OnActionListener
-
-    companion object Factory {
-        val TAG = "AddTaskDialogFragment"
-
-        fun create() : AddTaskDialogFragment {
-
-            val args = Bundle()
-
-            val dialog = AddTaskDialogFragment()
-            dialog.arguments = args
-            return dialog
-        }
-    }
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -49,12 +37,16 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
+        viewModel = viewModelProvider(factory)
+
+        bindToViewModelObservables(viewModel)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
 
-        binding.viewModel = viewModelProvider(factory)
+        binding.viewModel = viewModel
 
 //        binding.viewModel?.dismissEvent?.observe(this, Observer<Void>{
 //            onActionListener.onTaskAdded()
@@ -68,12 +60,12 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        dialog.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
     private fun initToolbar(toolbar : Toolbar) {
 
-        toolbar.navigationIcon = ContextCompat.getDrawable(context!!, R.drawable.ic_close)
+        toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_close)
 
         toolbar.setNavigationOnClickListener {
             dismiss()
@@ -81,8 +73,8 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
 
         toolbar.inflateMenu(R.menu.menu_add_task)
 
-        toolbar.setOnMenuItemClickListener {item : MenuItem? ->
-            val id = item!!.itemId
+        toolbar.setOnMenuItemClickListener { item : MenuItem? ->
+            val id = item?.itemId
 
             var result = false
 
@@ -97,5 +89,18 @@ class AddTaskDialogFragment : AppCompatDialogFragment() {
 
     interface OnActionListener {
         fun onTaskAdded()
+    }
+
+    companion object Factory {
+        const val TAG = "AddTaskDialogFragment"
+
+        fun create() : AddTaskDialogFragment {
+
+            val args = Bundle()
+
+            val dialog = AddTaskDialogFragment()
+            dialog.arguments = args
+            return dialog
+        }
     }
 }

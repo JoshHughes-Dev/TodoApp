@@ -1,12 +1,12 @@
 package com.jhughes.todoapp.ui
 
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.ActivityOptionsCompat
-import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.ViewModelProvider
+import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivitySplashBinding
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
+import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import kotlinx.android.synthetic.main.activity_splash.*
 import javax.inject.Inject
@@ -25,18 +25,19 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivitySplashBinding.inflate(layoutInflater)
+        binding.lifecycleOwner = this
 
         viewModel = viewModelProvider(factory)
+        bindToViewModelObservables(viewModel)
 
         binding.viewModel = viewModel
 
         setContentView(binding.root)
+    }
 
-//        viewModel.navigationEvent.observe(this, Observer<Navigator> { navigator ->
-//            handleNavigationEvent(navigator)
-//        })
-
-        lifecycle.addObserver(binding.viewModel as LifecycleObserver)
+    override fun onStart() {
+        super.onStart()
+        viewModel.startMain()
     }
 
     override fun onStop() {
@@ -46,49 +47,16 @@ class SplashActivity : BaseActivity() {
         }
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        lifecycle.removeObserver(binding.viewModel as LifecycleObserver)
-    }
+    override fun handleNavigationRequest(request: NavigationRequest): Boolean {
+        return when(request) {
+            is SplashViewModel.Nav.FinishSplash -> consume {
+                val intent = MainActivity.getStartIntent(this)
+                val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, splash_icon, "splash")
 
-//    private fun handleNavigationEvent(navigator: Navigator?) {
-//
-//        if (navigator == null) {
-//            return
-//        }
-//
-//        if (navigator.startActivity != null) {
-//            val intent = Intent(this, navigator.startActivity)
-//            if (navigator.bundle != null) {
-//                intent.putExtras(navigator.bundle)
-//            }
-//            if (navigator.requestCode > -1) {
-//                startActivityForResult(intent, navigator.requestCode)
-//            } else {
-//                startActivity(intent)
-//            }
-//        } else if (navigator.key != null) {
-//            handleNavigationKeyEvent(navigator)
-//        }
-//
-//        if (navigator.isFinishActivity) {
-//            //normally finish but here do something different
-//            hasPerformedTransition = true
-//        }
-//    }
-
-//    private fun handleNavigationKeyEvent(navigator: Navigator) {
-//        if (navigator.key == SplashViewModel.KEY_OPEN_MAIN) {
-//            onOpenMain()
-//        }
-//    }
-
-    private fun onOpenMain() {
-        Log.d("Navigate", "openMainMenu")
-
-        val intent = MainActivity.getStartIntent(this)
-        var options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, splash_icon, "splash")
-
-        startActivity(intent, options.toBundle())
+                startActivity(intent, options.toBundle())
+                hasPerformedTransition = true
+            }
+            else -> super.handleNavigationRequest(request)
+        }
     }
 }

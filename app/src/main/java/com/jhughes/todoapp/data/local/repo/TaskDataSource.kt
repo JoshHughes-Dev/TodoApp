@@ -1,7 +1,6 @@
 package com.jhughes.todoapp.data.local.repo
 
 import com.jhughes.todoapp.data.domain.model.Task
-import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.data.local.dao.TaskEntityDao
 import com.jhughes.todoapp.data.local.mapper.TaskMapper
 import com.jhughes.todoapp.data.util.AppExecutors
@@ -12,8 +11,8 @@ class TaskDataSource(
         private val appExecutors: AppExecutors,
         private val taskMapper: TaskMapper) {
 
-    fun getTasks(callback: TaskRepository.GetTasksCallback) {
-        val runnable = Runnable {
+    fun getTasks(callback: (List<Task>) -> Unit) {
+        appExecutors.diskIO().execute {
             val taskEntities = taskEntityDao.getAllTasks()
             val tasks = ArrayList<Task>()
 
@@ -21,38 +20,31 @@ class TaskDataSource(
                 tasks.add(taskMapper.toDomain(it))
             }
 
-            appExecutors.mainThread().execute({
-                callback.onComplete(tasks)
-            })
+            appExecutors.mainThread().execute{
+                callback(tasks)
+            }
         }
-
-        appExecutors.diskIO().execute(runnable)
     }
 
-    fun getTask(taskId: Int, callback: TaskRepository.GetTaskCallback) {
-        val runnable = Runnable {
+    fun getTask(taskId: Int, callback: (Task) -> Unit) {
+        appExecutors.diskIO().execute {
             val taskEntity = taskEntityDao.findTaskById(taskId)
             val task = taskMapper.toDomain(taskEntity)
 
-            appExecutors.mainThread().execute({
-                callback.onComplete(task)
-            })
+            appExecutors.mainThread().execute{
+                callback(task)
+            }
         }
-
-        appExecutors.diskIO().execute(runnable)
     }
 
-    fun addTask(description : String, callback: TaskRepository.GetTaskCallback) {
+    fun addTask(description : String, callback: (Task) -> Unit) {
+        val task = Task(0, false, description, DateTime.now())
 
-        var task = Task(0, false, description, DateTime.now())
-
-        val runnable = Runnable {
+        appExecutors.diskIO().execute {
             val id = taskEntityDao.insertTask(taskMapper.toEntity(task))
             val taskEntity = taskEntityDao.findTaskById(id.toInt())
-            callback.onComplete(taskMapper.toDomain(taskEntity))
+            callback(taskMapper.toDomain(taskEntity))
         }
-
-        appExecutors.diskIO().execute(runnable)
     }
 
     fun completeTask(task: Task) {
@@ -64,21 +56,16 @@ class TaskDataSource(
     }
 
     fun clearTasks() {
-
-        val runnable = Runnable {
+        appExecutors.diskIO().execute {
             taskEntityDao.deleteAll()
         }
-
-        appExecutors.diskIO().execute(runnable)
     }
 
     private fun changeTaskStatus(task: Task, status: Boolean) {
         val taskEntity = taskMapper.toEntity(task)
 
-        val runnable = Runnable {
+        appExecutors.diskIO().execute {
             taskEntityDao.updateCompleted(taskEntity.id, status)
         }
-
-        appExecutors.diskIO().execute(runnable)
     }
 }

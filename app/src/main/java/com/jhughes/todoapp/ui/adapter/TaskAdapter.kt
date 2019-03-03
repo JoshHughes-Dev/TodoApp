@@ -4,23 +4,23 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jhughes.todoapp.data.domain.model.Task
-import com.jhughes.todoapp.data.domain.repo.TaskRepository
 import com.jhughes.todoapp.databinding.RowTaskItemBinding
 import com.jhughes.todoapp.ui.viewModel.TaskRowViewModel
 
-class TaskAdapter(private val taskRepository: TaskRepository)
-    : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBinding>>(),
+class TaskAdapter : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBinding>>(),
         TaskRowViewModel.OnActionListener {
+
+    var onActionListener: OnActionListener? = null
 
     private val tasks: MutableList<Task> = ArrayList()
 
-    fun addTasks(tasks : List<Task>){
+    fun addTasks(tasks: List<Task>) {
         this.tasks.clear()
         this.tasks.addAll(tasks)
         notifyDataSetChanged()
     }
 
-    fun addTask(task : Task) {
+    fun addTask(task: Task) {
         this.tasks.add(task)
         notifyItemInserted(tasks.size)
     }
@@ -53,10 +53,15 @@ class TaskAdapter(private val taskRepository: TaskRepository)
     }
 
     override fun onStatusChange(taskId: String, isComplete: Boolean) {
-        if(isComplete) {
-            taskRepository.completeTask(taskId)
+        if (isComplete) {
+            onActionListener?.onCompleteTask(taskId)
         } else {
-            taskRepository.activateTask(taskId)
+            onActionListener?.onActivateTask(taskId)
         }
+    }
+
+    interface OnActionListener {
+        fun onCompleteTask(taskId: String)
+        fun onActivateTask(taskId: String)
     }
 }
