@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.util.IoScheduler
 import io.paperdb.Paper
+import io.paperdb.PaperDbException
 import org.joda.time.DateTime
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -57,11 +58,21 @@ class PaperDbTasksDataSource @Inject constructor() {
     }
 
     private fun readTasks() : List<Task> {
-        return Paper.book().read(ENTRY_NAME, emptyList())
+        return try {
+            Paper.book().read(ENTRY_NAME, emptyList())
+        } catch (e : PaperDbException) {
+            //todo error
+            emptyList()
+        }
     }
 
     private fun saveTasks(tasks : List<Task>) {
-        Paper.book().write(ENTRY_NAME, tasks)
+        try {
+            Paper.book().write(ENTRY_NAME, tasks)
+        } catch (e : PaperDbException) {
+            //todo error
+        }
+
     }
 
     companion object {
