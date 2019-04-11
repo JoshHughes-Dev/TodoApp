@@ -61,11 +61,11 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener,
         viewModel.refreshData()
     }
 
-    override fun onCompleteTask(taskId: String) {
+    override fun onCompleteTask(taskId: Int) {
         viewModel.taskRepository.completeTask(taskId)
     }
 
-    override fun onActivateTask(taskId: String) {
+    override fun onActivateTask(taskId: Int) {
         viewModel.taskRepository.activateTask(taskId)
     }
 

@@ -13,7 +13,7 @@ class DateTimeConverter {
     @TypeConverter
     fun toTimestamp(dateTime: DateTime?): Long? {
 
-        if(dateTime == null) {
+        if (dateTime == null) {
             return null
         }
 

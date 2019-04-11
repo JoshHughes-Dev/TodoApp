@@ -2,86 +2,66 @@ package com.jhughes.todoapp.data.domain.repo
 
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.local.repo.TaskDataSource
-import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class TaskRepository @Inject constructor(private val localDataSource: TaskDataSource) {
 
-    private val tasksMap = LinkedHashMap<String, Task>()
-
-    init {
-        localDataSource.getTasks { tasks ->
-            refreshCache(tasks)
-        }
-    }
+    private var cachedTasks : List<Task>? = null
 
     fun getTasks(callback: (List<Task>) -> Unit) {
-
-        if (tasksMap.isNotEmpty()) {
-            callback(ArrayList(tasksMap.values))
-        } else {
-            localDataSource.getTasks { tasks ->
-                refreshCache(tasks)
+        with(cachedTasks) {
+            if(this != null) {
+                callback(this)
+            } else {
+                localDataSource.getTasks { tasks ->
+                    cachedTasks = tasks
+                    callback(tasks)
+                }
             }
         }
     }
 
     fun getTask(taskId: Int, callback: (Task?) -> Unit) {
-
-        if (tasksMap.isNotEmpty()) {
-            val id = taskId.toString()
-
-            if (tasksMap.containsKey(id)) {
-                callback(tasksMap[id])
-            }
-        } else {
-            localDataSource.getTask(taskId) { task ->
+        with(cachedTasks) {
+            if (this != null) {
+                val task = find { it.id == taskId }
                 callback(task)
+            } else {
+                getTasks { tasks ->
+                    val task = tasks.find { it.id == taskId }
+                    callback(task)
+                }
             }
         }
     }
 
     fun addTask(description: String, callback: (Task) -> Unit) {
         localDataSource.addTask(description) { task ->
-            tasksMap[task.id.toString()] = task
+            cachedTasks = cachedTasks?.toMutableList()?.apply {
+                add(task)
+            }
             callback(task)
         }
     }
 
-    fun completeTask(taskId: String) {
-        if (tasksMap.containsKey(taskId)) {
-            tasksMap[taskId]?.let { task ->
-                task.isComplete = true
-                tasksMap[taskId] = task
-
-                localDataSource.completeTask(task)
-            }
+    fun completeTask(taskId: Int) {
+        cachedTasks?.find { it.id == taskId }?.let {
+            it.isComplete = true
+            localDataSource.completeTask(it)
         }
     }
 
-    fun activateTask(taskId: String) {
-        if (tasksMap.containsKey(taskId)) {
-            tasksMap[taskId]?.let { task ->
-                task.isComplete = false
-                tasksMap[taskId] = task
-
-                localDataSource.activateTask(task)
-            }
+    fun activateTask(taskId: Int) {
+        cachedTasks?.find { it.id == taskId }?.let {
+            it.isComplete = false
+            localDataSource.activateTask(it)
         }
     }
 
     fun clearTasks() {
-        tasksMap.clear()
+        cachedTasks = null
         localDataSource.clearTasks()
-    }
-
-    private fun refreshCache(tasks: List<Task>) {
-        tasksMap.clear()
-
-        for (task in tasks) {
-            tasksMap[task.id.toString()] = task
-        }
     }
 }

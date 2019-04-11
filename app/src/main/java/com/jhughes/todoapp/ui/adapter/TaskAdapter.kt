@@ -52,7 +52,7 @@ class TaskAdapter : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBindin
         holder.binding.viewModel?.listener = null
     }
 
-    override fun onStatusChange(taskId: String, isComplete: Boolean) {
+    override fun onStatusChange(taskId: Int, isComplete: Boolean) {
         if (isComplete) {
             onActionListener?.onCompleteTask(taskId)
         } else {
@@ -61,7 +61,7 @@ class TaskAdapter : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBindin
     }
 
     interface OnActionListener {
-        fun onCompleteTask(taskId: String)
-        fun onActivateTask(taskId: String)
+        fun onCompleteTask(taskId: Int)
+        fun onActivateTask(taskId: Int)
     }
 }
