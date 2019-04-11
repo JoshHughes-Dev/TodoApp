@@ -2,13 +2,12 @@ package com.jhughes.todoapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.databinding.RowTaskItemBinding
 import com.jhughes.todoapp.ui.viewModel.TaskRowViewModel
+import com.jhughes.todoapp.ui.viewModel.util.EventObserver
 
-class TaskAdapter : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBinding>>(),
-        TaskRowViewModel.OnActionListener {
+class TaskAdapter : DataBindingAdapter<RowTaskItemBinding>() {
 
     var onActionListener: OnActionListener? = null
 
@@ -29,34 +28,28 @@ class TaskAdapter : RecyclerView.Adapter<DataBindingViewHolder<RowTaskItemBindin
         return tasks.size
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataBindingViewHolder<RowTaskItemBinding> {
+    override fun onCreateViewDataBinding(parent: ViewGroup, viewType: Int): RowTaskItemBinding {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = RowTaskItemBinding.inflate(inflater, parent, false)
-
-        return DataBindingViewHolder(binding)
+        return RowTaskItemBinding.inflate(inflater, parent, false)
     }
 
     override fun onBindViewHolder(holder: DataBindingViewHolder<RowTaskItemBinding>, position: Int) {
         val task = tasks[position]
         val viewModel = TaskRowViewModel(task)
 
-        viewModel.listener = this
-
-        holder.binding.viewModel = viewModel
-        holder.binding.executePendingBindings()
-    }
-
-    override fun onViewDetachedFromWindow(holder: DataBindingViewHolder<RowTaskItemBinding>) {
-        super.onViewDetachedFromWindow(holder)
-
-        holder.binding.viewModel?.listener = null
-    }
-
-    override fun onStatusChange(taskId: Int, isComplete: Boolean) {
-        if (isComplete) {
-            onActionListener?.onCompleteTask(taskId)
-        } else {
-            onActionListener?.onActivateTask(taskId)
+        holder.apply {
+            binding.viewModel = viewModel
+            viewModel.delegateAction.observe(this, EventObserver {
+                when (it) {
+                    is TaskRowViewModel.Action.StatusChange -> {
+                        if (it.isComplete) {
+                            onActionListener?.onCompleteTask(it.taskId)
+                        } else {
+                            onActionListener?.onActivateTask(it.taskId)
+                        }
+                    }
+                }
+            })
         }
     }
 

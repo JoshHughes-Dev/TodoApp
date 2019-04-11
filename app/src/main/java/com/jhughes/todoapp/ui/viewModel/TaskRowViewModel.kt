@@ -4,11 +4,11 @@ import androidx.databinding.Bindable
 import androidx.databinding.Observable
 import androidx.databinding.ObservableBoolean
 import com.jhughes.todoapp.data.domain.model.Task
+import com.jhughes.todoapp.ui.viewModel.util.Event
 
 class TaskRowViewModel(private val task: Task) : ArchViewModel() {
 
     val isComplete = ObservableBoolean(task.isComplete)
-    var listener : OnActionListener? = null
 
     val description : CharSequence?
     @Bindable
@@ -17,12 +17,12 @@ class TaskRowViewModel(private val task: Task) : ArchViewModel() {
     init {
         isComplete.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback(){
             override fun onPropertyChanged(p0: Observable?, p1: Int) {
-                listener?.onStatusChange(task.id, isComplete.get())
+                delegateAction.value = Event(Action.StatusChange(task.id, isComplete.get()))
             }
         })
     }
 
-    interface OnActionListener {
-        fun onStatusChange(taskId: Int, isComplete : Boolean)
+    sealed class Action {
+        data class StatusChange(val taskId: Int, val isComplete : Boolean) : Action()
     }
 }
