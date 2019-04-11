@@ -2,6 +2,7 @@ package com.jhughes.todoapp.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.databinding.RowTaskItemBinding
 import com.jhughes.todoapp.ui.viewModel.TaskRowViewModel
@@ -14,9 +15,13 @@ class TaskAdapter : DataBindingAdapter<RowTaskItemBinding>() {
     private val tasks: MutableList<Task> = ArrayList()
 
     fun addTasks(tasks: List<Task>) {
+        val diffCallback = TaskDiffCallback(this.tasks, tasks)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
         this.tasks.clear()
         this.tasks.addAll(tasks)
-        notifyDataSetChanged()
+
+        diffResult.dispatchUpdatesTo(this)
     }
 
     fun addTask(task: Task) {
@@ -56,5 +61,22 @@ class TaskAdapter : DataBindingAdapter<RowTaskItemBinding>() {
     interface OnActionListener {
         fun onCompleteTask(taskId: Int)
         fun onActivateTask(taskId: Int)
+    }
+}
+
+class TaskDiffCallback(private val oldTasks : List<Task>,
+                       private val newTasks : List<Task>) : DiffUtil.Callback() {
+
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldTasks[oldItemPosition] == newTasks[newItemPosition]
+    }
+
+    override fun getOldListSize(): Int = oldTasks.size
+
+    override fun getNewListSize(): Int = newTasks.size
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldTasks[oldItemPosition] == newTasks[newItemPosition]
     }
 }

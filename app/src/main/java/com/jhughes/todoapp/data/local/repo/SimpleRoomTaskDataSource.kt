@@ -6,7 +6,7 @@ import com.jhughes.todoapp.data.local.mapper.TaskMapper
 import com.jhughes.todoapp.util.IoScheduler
 import org.joda.time.DateTime
 
-class TaskDataSource(
+class SimpleRoomTaskDataSource(
         private val taskEntityDao: TaskEntityDao,
         private val taskMapper: TaskMapper) {
 

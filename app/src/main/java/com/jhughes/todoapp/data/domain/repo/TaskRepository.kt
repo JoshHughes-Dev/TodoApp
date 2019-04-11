@@ -1,12 +1,12 @@
 package com.jhughes.todoapp.data.domain.repo
 
 import com.jhughes.todoapp.data.domain.model.Task
-import com.jhughes.todoapp.data.local.repo.TaskDataSource
+import com.jhughes.todoapp.data.local.repo.SimpleRoomTaskDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TaskRepository @Inject constructor(private val localDataSource: TaskDataSource) {
+class TaskRepository @Inject constructor(private val localDataSource: SimpleRoomTaskDataSource) {
 
     private var cachedTasks : List<Task>? = null
 

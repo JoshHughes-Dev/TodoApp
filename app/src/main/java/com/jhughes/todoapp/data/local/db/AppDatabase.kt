@@ -4,6 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.jhughes.todoapp.data.local.converters.DateTimeConverter
+import com.jhughes.todoapp.data.local.dao.LiveDataTaskEntityDao
 import com.jhughes.todoapp.data.local.dao.TaskEntityDao
 import com.jhughes.todoapp.data.local.entity.TaskEntity
 
@@ -16,4 +17,6 @@ abstract class AppDatabase : RoomDatabase() {
     }
 
     abstract fun taskDao() : TaskEntityDao
+
+    abstract fun liveDataTaskDao() : LiveDataTaskEntityDao
 }

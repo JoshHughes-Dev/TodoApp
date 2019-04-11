@@ -3,8 +3,10 @@ package com.jhughes.todoapp.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivityMainBinding
 import com.jhughes.todoapp.ui.adapter.TaskAdapter
@@ -22,7 +24,7 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener,
 
     @Inject lateinit var factory: ViewModelProvider.Factory
 
-    private val adapter = TaskAdapter()
+    private val tasksAdapter = TaskAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +40,18 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener,
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
 
-        binding.recyclerTasks.adapter = adapter
+        binding.recyclerTasks.apply {
+            adapter = tasksAdapter
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
+            //removes fade animation on single row that changes when live data update
+        }
 
         viewModel.tasks.observe(this, Observer {
-            adapter.addTasks(it)
+            Log.d("MainActivity", "tasks updated")
+            tasksAdapter.addTasks(it)
         })
 
-        adapter.onActionListener = this
+        tasksAdapter.onActionListener = this
     }
 
     override fun handleNavigationRequest(request: NavigationRequest): Boolean {
@@ -62,11 +69,13 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener,
     }
 
     override fun onCompleteTask(taskId: Int) {
-        viewModel.taskRepository.completeTask(taskId)
+        //viewModel.taskRepository.completeTask(taskId)
+        viewModel.liveDataTaskRepo.completeTask(taskId)
     }
 
     override fun onActivateTask(taskId: Int) {
-        viewModel.taskRepository.activateTask(taskId)
+        //viewModel.taskRepository.activateTask(taskId)
+        viewModel.liveDataTaskRepo.activateTask(taskId)
     }
 
     companion object Factory {
