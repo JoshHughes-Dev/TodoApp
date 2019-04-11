@@ -42,12 +42,12 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener,
 
         binding.recyclerTasks.apply {
             adapter = tasksAdapter
-            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             //removes fade animation on single row that changes when live data update
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false // didnt work
         }
 
         viewModel.tasks.observe(this, Observer {
-            Log.d("MainActivity", "tasks updated")
+            Log.d("MainActivity", "tasks updated, count: ${it.size}")
             tasksAdapter.addTasks(it)
         })
 
@@ -70,12 +70,14 @@ class MainActivity : BaseActivity(), AddTaskDialogFragment.OnActionListener,
 
     override fun onCompleteTask(taskId: Int) {
         //viewModel.taskRepository.completeTask(taskId)
-        viewModel.liveDataTaskRepo.completeTask(taskId)
+        //viewModel.liveDataTaskRepo.completeTask(taskId)
+        viewModel.paperDbTaskRepo.completeTask(taskId)
     }
 
     override fun onActivateTask(taskId: Int) {
         //viewModel.taskRepository.activateTask(taskId)
-        viewModel.liveDataTaskRepo.activateTask(taskId)
+        //viewModel.liveDataTaskRepo.activateTask(taskId)
+        viewModel.paperDbTaskRepo.activateTask(taskId)
     }
 
     companion object Factory {
