@@ -6,23 +6,11 @@ import com.jhughes.todoapp.di.scope.ActivityScope
 import com.jhughes.todoapp.di.scope.FragmentScope
 import com.jhughes.todoapp.ui.activity.ChooserActivity
 import com.jhughes.todoapp.ui.activity.SplashActivity
-import com.jhughes.todoapp.ui.activity.tasks.CoroutinesTasksActivity
-import com.jhughes.todoapp.ui.activity.tasks.LiveDataTasksActivity
-import com.jhughes.todoapp.ui.activity.tasks.PaperDbTasksActivity
-import com.jhughes.todoapp.ui.activity.tasks.SimpleTasksActivity
-import com.jhughes.todoapp.ui.fragment.addTask.CoroutinesAddTaskDialogFragment
-import com.jhughes.todoapp.ui.fragment.addTask.LiveDataAddTaskDialogFragment
-import com.jhughes.todoapp.ui.fragment.addTask.PaperDbAddTaskDialogFragment
-import com.jhughes.todoapp.ui.fragment.addTask.SimpleAddTaskDialogFragment
+import com.jhughes.todoapp.ui.activity.tasks.*
+import com.jhughes.todoapp.ui.fragment.addTask.*
 import com.jhughes.todoapp.ui.viewModel.ChooserViewModel
-import com.jhughes.todoapp.ui.viewModel.addTask.CoroutinesAddTaskViewModel
-import com.jhughes.todoapp.ui.viewModel.addTask.LiveDataAddTaskViewModel
-import com.jhughes.todoapp.ui.viewModel.addTask.PaperDbAddTaskViewModel
-import com.jhughes.todoapp.ui.viewModel.addTask.SimpleAddTaskViewModel
-import com.jhughes.todoapp.ui.viewModel.tasks.CoroutinesTasksViewModel
-import com.jhughes.todoapp.ui.viewModel.tasks.LiveDataTasksViewModel
-import com.jhughes.todoapp.ui.viewModel.tasks.PaperDbTasksViewModel
-import com.jhughes.todoapp.ui.viewModel.tasks.SimpleTasksViewModel
+import com.jhughes.todoapp.ui.viewModel.addTask.*
+import com.jhughes.todoapp.ui.viewModel.tasks.*
 import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
@@ -53,7 +41,11 @@ abstract class ActivityBindingModule {
 
     @ActivityScope
     @ContributesAndroidInjector(modules = [CoroutinesTasksActivityModule::class])
-    abstract fun CoroutinesTasksActivity() : CoroutinesTasksActivity
+    abstract fun coroutinesTasksActivity() : CoroutinesTasksActivity
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [SuperActivityModule::class])
+    abstract fun superTasksActivity() : SuperTasksActivity
 }
 
 @Module(includes = [ActivityModule::class])
@@ -150,4 +142,26 @@ abstract class CoroutinesAddTaskDialogFragmentModule {
     @IntoMap
     @ViewModelKey(CoroutinesAddTaskViewModel::class)
     abstract fun bindCoroutinesAddTaskViewModel(viewModel: CoroutinesAddTaskViewModel) : ViewModel
+}
+
+@Module(includes = [ActivityModule::class])
+abstract class SuperActivityModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SuperTasksViewModel::class)
+    abstract fun bindSuperTasksViewModel(viewModel: SuperTasksViewModel) : ViewModel
+
+    @FragmentScope
+    @ContributesAndroidInjector(modules = [SuperAddTaskDialogFragmentModule::class])
+    abstract fun addTaskFragment(): SuperAddTaskDialogFragment
+}
+
+@Module
+abstract class SuperAddTaskDialogFragmentModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SuperAddTaskViewModel::class)
+    abstract fun bindSuperAddTaskViewModel(viewModel: SuperAddTaskViewModel) : ViewModel
 }

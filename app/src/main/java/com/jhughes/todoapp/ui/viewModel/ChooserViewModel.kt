@@ -21,11 +21,15 @@ class ChooserViewModel @Inject constructor(): ArchViewModel() {
         navigate(Nav.CoroutinesExample)
     }
 
+    fun showSuperExample() {
+        navigate(Nav.SuperExample)
+    }
 
     class Nav {
         object SimpleExample : NavigationRequest()
         object LiveDataExample : NavigationRequest()
         object PaperDbExample : NavigationRequest()
         object CoroutinesExample : NavigationRequest()
+        object SuperExample : NavigationRequest()
     }
 }

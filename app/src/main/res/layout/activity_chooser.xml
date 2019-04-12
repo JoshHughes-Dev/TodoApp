@@ -61,6 +61,12 @@
                 android:text="Coroutines Example"
                 android:onClick="@{() -> viewModel.showCoroutinesExample()}"/>
 
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Super Example"
+                android:onClick="@{() -> viewModel.showSuperExample()}"/>
+
         </LinearLayout>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

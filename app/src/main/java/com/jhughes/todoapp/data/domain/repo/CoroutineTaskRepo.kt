@@ -27,6 +27,7 @@ class CoroutineTaskRepo @Inject constructor() {
                 }
             }
         }
+
     }
 
     suspend fun addTask(description: String) {
@@ -70,7 +71,6 @@ class CoroutineTaskRepo @Inject constructor() {
         } catch (e : PaperDbException) {
             //todo error
         }
-
     }
 
     companion object {

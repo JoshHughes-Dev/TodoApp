@@ -7,10 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivityChooserBinding
 import com.jhughes.todoapp.ui.BaseActivity
-import com.jhughes.todoapp.ui.activity.tasks.CoroutinesTasksActivity
-import com.jhughes.todoapp.ui.activity.tasks.LiveDataTasksActivity
-import com.jhughes.todoapp.ui.activity.tasks.PaperDbTasksActivity
-import com.jhughes.todoapp.ui.activity.tasks.SimpleTasksActivity
+import com.jhughes.todoapp.ui.activity.tasks.*
 import com.jhughes.todoapp.ui.viewModel.ChooserViewModel
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
@@ -51,6 +48,9 @@ class ChooserActivity : BaseActivity() {
             }
             is ChooserViewModel.Nav.CoroutinesExample -> consume {
                 startActivity(CoroutinesTasksActivity.getStartIntent(requireActivity()))
+            }
+            is ChooserViewModel.Nav.SuperExample -> consume {
+                startActivity(SuperTasksActivity.getStartIntent(requireActivity()))
             }
             else -> super.handleNavigationRequest(request)
         }
