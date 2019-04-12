@@ -1,4 +1,4 @@
-package com.jhughes.todoapp.ui.fragment
+package com.jhughes.todoapp.ui.fragment.addTask
 
 import android.content.Context
 import android.os.Bundle
@@ -10,20 +10,22 @@ import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.R
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
-import com.jhughes.todoapp.ui.viewModel.AddTaskViewModel
+import com.jhughes.todoapp.ui.fragment.BaseDialogFragment
+import com.jhughes.todoapp.ui.viewModel.addTask.LiveDataAddTaskViewModel
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
-class AddTaskDialogFragment : BaseDialogFragment() {
+class LiveDataAddTaskDialogFragment : BaseDialogFragment() {
 
-    private lateinit var binding : FragmentAddTaskBinding
-    private lateinit var viewModel : AddTaskViewModel
+    private lateinit var binding: FragmentAddTaskBinding
+    private lateinit var viewModel: LiveDataAddTaskViewModel
 
-    @Inject lateinit var factory: ViewModelProvider.Factory
+    @Inject
+    lateinit var factory: ViewModelProvider.Factory
 
-    private lateinit var onActionListener : OnActionListener
+    private lateinit var onActionListener: OnActionListener
 
     override fun onAttach(context: Context?) {
         AndroidSupportInjection.inject(this)
@@ -60,7 +62,7 @@ class AddTaskDialogFragment : BaseDialogFragment() {
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
     }
 
-    private fun initToolbar(toolbar : Toolbar) {
+    private fun initToolbar(toolbar: Toolbar) {
 
         toolbar.navigationIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_close)
 
@@ -70,12 +72,12 @@ class AddTaskDialogFragment : BaseDialogFragment() {
 
         toolbar.inflateMenu(R.menu.menu_add_task)
 
-        toolbar.setOnMenuItemClickListener { item : MenuItem? ->
+        toolbar.setOnMenuItemClickListener { item: MenuItem? ->
             val id = item?.itemId
 
             var result = false
 
-            if(id == R.id.action_save) {
+            if (id == R.id.action_save) {
                 binding.viewModel?.save()
                 result = true
             }
@@ -85,8 +87,8 @@ class AddTaskDialogFragment : BaseDialogFragment() {
     }
 
     override fun handleNavigationRequest(request: NavigationRequest): Boolean {
-        return when(request) {
-            AddTaskViewModel.Nav.AddedTask -> consume {
+        return when (request) {
+            LiveDataAddTaskViewModel.Nav.AddedTask -> consume {
                 onActionListener.onTaskAdded()
                 dismiss()
             }
@@ -101,11 +103,11 @@ class AddTaskDialogFragment : BaseDialogFragment() {
     companion object Factory {
         const val TAG = "AddTaskDialogFragment"
 
-        fun create() : AddTaskDialogFragment {
+        fun create(): LiveDataAddTaskDialogFragment {
 
             val args = Bundle()
 
-            val dialog = AddTaskDialogFragment()
+            val dialog = LiveDataAddTaskDialogFragment()
             dialog.arguments = args
             return dialog
         }

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jhughes.todoapp.ui.viewModel.TaskRowViewModel"/>
+            type="com.jhughes.todoapp.ui.viewModel.tasks.TaskRowViewModel"/>
     </data>
 
     <LinearLayout

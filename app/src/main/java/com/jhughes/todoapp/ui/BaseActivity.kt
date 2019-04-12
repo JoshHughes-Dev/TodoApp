@@ -3,6 +3,7 @@ package com.jhughes.todoapp.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
@@ -30,16 +31,14 @@ abstract class BaseActivity : DaggerAppCompatActivity(), UiController,
     override fun handleLoadingEvent(loadingEvent: LoadingEvent) {
         when (loadingEvent) {
             is LoadingEvent.Show -> {
+                Log.d("BaseActivity", "show loader")
             }
-            //dialogHandler.showLoading(loadingEvent.cancelable, loadingEvent.cancelCallback)
             is LoadingEvent.Hide -> {
+                Log.d("BaseActivity", "hide loader")
             }
-            //dialogHandler.hideLoading()
             is LoadingEvent.Complete -> {
+                Log.d("BaseActivity", "task complete")
             }
-//                TaskCompletedDialog.show(this, loadingEvent.message).apply {
-//                    setOnDismissListener { loadingEvent.callback?.invoke() }
-//                }
         }
     }
 

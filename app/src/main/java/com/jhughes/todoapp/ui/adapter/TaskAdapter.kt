@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.databinding.RowTaskItemBinding
-import com.jhughes.todoapp.ui.viewModel.TaskRowViewModel
+import com.jhughes.todoapp.ui.viewModel.tasks.TaskRowViewModel
 import com.jhughes.todoapp.ui.viewModel.util.EventObserver
 
 class TaskAdapter : DataBindingAdapter<RowTaskItemBinding>() {

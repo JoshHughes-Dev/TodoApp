@@ -8,14 +8,14 @@
     <data>
         <variable
             name="viewModel"
-            type="com.jhughes.todoapp.ui.viewModel.MainViewModel"/>
+            type="com.jhughes.todoapp.ui.viewModel.ChooserViewModel"/>
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context="com.jhughes.todoapp.ui.MainActivity">
+        tools:context="com.jhughes.todoapp.ui.activity.MainActivity">
 
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -37,24 +37,31 @@
             android:orientation="vertical"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_tasks"
+            <Button
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+                android:layout_height="wrap_content"
+                android:text="Simple Example"
+                android:onClick="@{() -> viewModel.showSimpleExample()}"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="LiveData Example"
+                android:onClick="@{() -> viewModel.showLiveDataExample()}"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="PaperDb Example"
+                android:onClick="@{() -> viewModel.showPaperDbExample()}"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Coroutines Example"
+                android:onClick="@{() -> viewModel.showCoroutinesExample()}"/>
 
         </LinearLayout>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            app:srcCompat="@android:drawable/ic_input_add"
-            android:tint="@android:color/white"
-            android:onClick="@{() -> viewModel.fabClick()}"
-            android:transitionName="splash"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

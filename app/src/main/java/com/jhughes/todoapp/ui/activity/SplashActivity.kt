@@ -1,10 +1,11 @@
-package com.jhughes.todoapp.ui
+package com.jhughes.todoapp.ui.activity
 
 import android.os.Bundle
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivitySplashBinding
+import com.jhughes.todoapp.ui.BaseActivity
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
@@ -50,7 +51,7 @@ class SplashActivity : BaseActivity() {
     override fun handleNavigationRequest(request: NavigationRequest): Boolean {
         return when(request) {
             is SplashViewModel.Nav.FinishSplash -> consume {
-                val intent = MainActivity.getStartIntent(this)
+                val intent = ChooserActivity.getStartIntent(this)
                 val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, splash_icon, "splash")
 
                 startActivity(intent, options.toBundle())
