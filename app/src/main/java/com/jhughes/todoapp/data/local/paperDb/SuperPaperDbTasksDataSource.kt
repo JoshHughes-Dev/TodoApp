@@ -28,7 +28,7 @@ class SuperPaperDbTasksDataSource @Inject constructor() {
         return cachedTasks
     }
 
-    suspend fun addTask(description : String) {
+    fun addTask(description : String) {
         val tasks = (cachedTasks.value ?: readTasks()).toMutableList()
 
         val newId = (tasks.lastOrNull()?.id ?: 0) + 1
@@ -40,14 +40,14 @@ class SuperPaperDbTasksDataSource @Inject constructor() {
         cachedTasks.postValue(tasks)
     }
 
-    suspend fun completeTask(taskId : Int) {
+    fun completeTask(taskId : Int) {
         val tasks = (cachedTasks.value ?: readTasks()).toMutableList()
         tasks.find { it.id == taskId }?.isComplete = true
         saveTasks(tasks)
         cachedTasks.postValue(tasks)
     }
 
-    suspend fun activateTask(taskId: Int) {
+    fun activateTask(taskId: Int) {
         val tasks = readTasks().toMutableList()
         tasks.find { it.id == taskId }?.isComplete = false
         saveTasks(tasks)
