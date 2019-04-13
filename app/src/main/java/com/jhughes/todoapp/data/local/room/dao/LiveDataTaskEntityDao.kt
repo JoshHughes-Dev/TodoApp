@@ -1,4 +1,4 @@
-package com.jhughes.todoapp.data.local.dao
+package com.jhughes.todoapp.data.local.room.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

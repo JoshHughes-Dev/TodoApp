@@ -1,11 +1,11 @@
-package com.jhughes.todoapp.data.local.db
+package com.jhughes.todoapp.data.local.room.db
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.jhughes.todoapp.data.local.converters.DateTimeConverter
-import com.jhughes.todoapp.data.local.dao.LiveDataTaskEntityDao
-import com.jhughes.todoapp.data.local.dao.TaskEntityDao
+import com.jhughes.todoapp.data.local.room.converters.DateTimeConverter
+import com.jhughes.todoapp.data.local.room.dao.LiveDataTaskEntityDao
+import com.jhughes.todoapp.data.local.room.dao.TaskEntityDao
 import com.jhughes.todoapp.data.local.entity.TaskEntity
 
 @Database(entities = arrayOf(TaskEntity::class), version = 1, exportSchema = false)

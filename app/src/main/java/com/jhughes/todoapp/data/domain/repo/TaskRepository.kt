@@ -1,7 +1,7 @@
 package com.jhughes.todoapp.data.domain.repo
 
 import com.jhughes.todoapp.data.domain.model.Task
-import com.jhughes.todoapp.data.local.repo.SimpleRoomTaskDataSource
+import com.jhughes.todoapp.data.local.room.SimpleRoomTaskDataSource
 import javax.inject.Inject
 import javax.inject.Singleton
 

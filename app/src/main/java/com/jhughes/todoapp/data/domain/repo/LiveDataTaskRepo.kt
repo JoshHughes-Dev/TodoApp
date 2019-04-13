@@ -4,8 +4,8 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.jhughes.todoapp.data.domain.model.Task
-import com.jhughes.todoapp.data.local.dao.LiveDataTaskEntityDao
 import com.jhughes.todoapp.data.local.mapper.TaskMapper
+import com.jhughes.todoapp.data.local.room.dao.LiveDataTaskEntityDao
 import com.jhughes.todoapp.util.IoScheduler
 import org.joda.time.DateTime
 import javax.inject.Inject

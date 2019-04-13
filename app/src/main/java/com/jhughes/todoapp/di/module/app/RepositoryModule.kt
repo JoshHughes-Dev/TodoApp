@@ -1,9 +1,9 @@
 package com.jhughes.todoapp.di.module.app
 
-import com.jhughes.todoapp.data.local.dao.LiveDataTaskEntityDao
-import com.jhughes.todoapp.data.local.db.AppDatabase
+import com.jhughes.todoapp.data.local.room.dao.LiveDataTaskEntityDao
+import com.jhughes.todoapp.data.local.room.db.AppDatabase
 import com.jhughes.todoapp.data.local.mapper.TaskMapper
-import com.jhughes.todoapp.data.local.repo.SimpleRoomTaskDataSource
+import com.jhughes.todoapp.data.local.room.SimpleRoomTaskDataSource
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

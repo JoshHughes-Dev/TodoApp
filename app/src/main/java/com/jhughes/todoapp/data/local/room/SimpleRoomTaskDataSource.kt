@@ -1,7 +1,7 @@
-package com.jhughes.todoapp.data.local.repo
+package com.jhughes.todoapp.data.local.room
 
 import com.jhughes.todoapp.data.domain.model.Task
-import com.jhughes.todoapp.data.local.dao.TaskEntityDao
+import com.jhughes.todoapp.data.local.room.dao.TaskEntityDao
 import com.jhughes.todoapp.data.local.mapper.TaskMapper
 import com.jhughes.todoapp.util.IoScheduler
 import org.joda.time.DateTime

@@ -2,7 +2,7 @@ package com.jhughes.todoapp.di.module.app
 
 import android.app.Application
 import androidx.room.Room
-import com.jhughes.todoapp.data.local.db.AppDatabase
+import com.jhughes.todoapp.data.local.room.db.AppDatabase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton

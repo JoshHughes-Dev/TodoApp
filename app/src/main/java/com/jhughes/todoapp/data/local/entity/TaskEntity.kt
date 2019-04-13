@@ -3,7 +3,7 @@ package com.jhughes.todoapp.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.jhughes.todoapp.data.local.dao.TaskEntityDao
+import com.jhughes.todoapp.data.local.room.dao.TaskEntityDao
 import org.joda.time.DateTime
 
 @Entity(tableName = TaskEntityDao.TABLE_NAME)
