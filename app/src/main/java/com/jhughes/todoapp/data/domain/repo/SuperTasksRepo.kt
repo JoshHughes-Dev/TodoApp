@@ -3,7 +3,7 @@ package com.jhughes.todoapp.data.domain.repo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import com.jhughes.todoapp.data.SimpleResult
-import com.jhughes.todoapp.data.State
+import com.jhughes.todoapp.data.Resource
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.local.paperDb.SuperPaperDbTasksDataSource
 import com.jhughes.todoapp.safeAction
@@ -15,17 +15,17 @@ import javax.inject.Singleton
 class SuperTasksRepo @Inject constructor(
         private val localDataSource : SuperPaperDbTasksDataSource) {
 
-    fun getTasks(scope : CoroutineScope) : LiveData<State<List<Task>>> {
-        val data = MediatorLiveData<State<List<Task>>>().apply {
-            value = State.Loading
+    fun getTasks(scope : CoroutineScope) : LiveData<Resource<List<Task>>> {
+        val data = MediatorLiveData<Resource<List<Task>>>().apply {
+            value = Resource.Loading
         }
 
         try {
             data.addSource(localDataSource.getTasks(scope)) {
-                data.value = State.Success(it)
+                data.value = Resource.Success(it)
             }
         } catch (e : Exception) {
-            data.value = State.Error(e)
+            data.value = Resource.Error(e)
         }
 
         return data

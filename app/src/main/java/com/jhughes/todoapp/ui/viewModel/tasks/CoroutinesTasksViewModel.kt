@@ -3,7 +3,7 @@ package com.jhughes.todoapp.ui.viewModel.tasks
 import androidx.lifecycle.LiveData
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.domain.repo.CoroutineTaskRepo
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.NavigationCommand
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -66,6 +66,6 @@ class CoroutinesTasksViewModel @Inject constructor(
 //    }
 
     class Nav {
-        object AddNewTask : NavigationRequest()
+        object AddNewTask : NavigationCommand()
     }
 }

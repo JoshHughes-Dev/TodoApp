@@ -3,32 +3,30 @@ package com.jhughes.todoapp.ui.viewModel.util
 import androidx.lifecycle.LifecycleOwner
 
 
-interface NavigationRequester {
-    val navRequestEventData : EventLiveData<NavigationRequest>
+interface NavigationInvoker {
+    val navCommandEventData : EventLiveData<NavigationCommand>
 
-    fun navigate(request : NavigationRequest) {
-        navRequestEventData.value = Event(request)
+    fun navigate(command : NavigationCommand) {
+        navCommandEventData.value = Event(command)
     }
 }
 
-open class NavigationRequest {
-    object Close : NavigationRequest()
-    object Back : NavigationRequest()
+open class NavigationCommand {
+    object Close : NavigationCommand()
+    object Back : NavigationCommand()
 }
 
 interface NavigationHandler {
 
-    val routers : MutableList<Router>
+    val navigationRouters : MutableList<Router>
 
-    fun bindToNavigationObservable(lifecycleOwner: LifecycleOwner, navigationRequester: NavigationRequester) {
-        navigationRequester.navRequestEventData.observe(lifecycleOwner, EventObserver { event ->
-            loop@ for(router in routers) {
-                if(router.routeNavigationRequest(event)) break@loop
+    fun LifecycleOwner.observeNavigationCommandsFrom(navigationInvoker: NavigationInvoker) {
+        navigationInvoker.navCommandEventData.observe(this, EventObserver { navCommand ->
+            loop@ for(router in navigationRouters) {
+                if(router.handler(navCommand)) break@loop
             }
         })
     }
 }
 
-abstract class Router {
-    abstract fun routeNavigationRequest(request: NavigationRequest) : Boolean
-}
+open class Router(val handler : (navCommand : NavigationCommand) -> Boolean)

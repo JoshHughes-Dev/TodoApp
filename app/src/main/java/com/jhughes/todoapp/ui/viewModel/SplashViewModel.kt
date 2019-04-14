@@ -1,7 +1,7 @@
 package com.jhughes.todoapp.ui.viewModel
 
 import android.util.Log
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.NavigationCommand
 import com.jhughes.todoapp.util.SyncScheduler
 import javax.inject.Inject
 
@@ -15,7 +15,7 @@ class SplashViewModel @Inject constructor() : ArchViewModel() {
         SyncScheduler.runAllScheduledPostDelayedTasks()
     }
 
-    class Nav {
-        object FinishSplash : NavigationRequest()
+    sealed class Nav : NavigationCommand() {
+        object FinishSplash : Nav()
     }
 }

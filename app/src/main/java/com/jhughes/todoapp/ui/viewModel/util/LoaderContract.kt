@@ -26,11 +26,11 @@ sealed class LoadingEvent {
 }
 
 interface LoaderHandler {
-    fun bindToLoaderObservable(lifecycleOwner: LifecycleOwner, loaderRequester: LoaderRequester) {
-        loaderRequester.loadingEventData.observe(lifecycleOwner, EventObserver {
-            handleLoadingEvent(it)
+    fun LifecycleOwner.observeLoadingEventsFrom(loaderRequester: LoaderRequester) {
+        loaderRequester.loadingEventData.observe(this, EventObserver {
+            onLoadingEvent(it)
         })
     }
 
-    fun handleLoadingEvent(loadingEvent: LoadingEvent)
+    fun onLoadingEvent(loadingEvent: LoadingEvent)
 }

@@ -3,7 +3,7 @@ package com.jhughes.todoapp.ui.viewModel.tasks
 import androidx.lifecycle.LiveData
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.domain.repo.PaperDbTaskRepo
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.NavigationCommand
 import javax.inject.Inject
 
 class PaperDbTasksViewModel @Inject constructor(
@@ -16,6 +16,6 @@ class PaperDbTasksViewModel @Inject constructor(
     }
 
     class Nav {
-        object AddNewTask : NavigationRequest()
+        object AddNewTask : NavigationCommand()
     }
 }

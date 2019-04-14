@@ -4,7 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.appcompat.widget.Toolbar
+import android.view.Menu
+import android.view.MenuItem
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -15,7 +16,7 @@ import com.jhughes.todoapp.ui.activity.BaseActivity
 import com.jhughes.todoapp.ui.adapter.TaskAdapter
 import com.jhughes.todoapp.ui.fragment.addTask.CoroutinesAddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.tasks.CoroutinesTasksViewModel
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.Router
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import javax.inject.Inject
 
@@ -32,6 +33,7 @@ class CoroutinesTasksActivity : BaseActivity(), CoroutinesAddTaskDialogFragment.
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navigationRouters.add(activityRouter())
 
         binding = ActivityTasksBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
@@ -53,18 +55,26 @@ class CoroutinesTasksActivity : BaseActivity(), CoroutinesAddTaskDialogFragment.
         viewModel.tasks.observe(this, Observer {
             Log.d("MainActivity", "tasks updated, count: ${it.size}")
             tasksAdapter.addTasks(it)
+            invalidateOptionsMenu()
         })
 
         tasksAdapter.onActionListener = this
     }
 
-    override fun handleNavigationRequest(request: NavigationRequest): Boolean {
-        return when(request) {
-            is CoroutinesTasksViewModel.Nav.AddNewTask -> consume {
-                val dialog = CoroutinesAddTaskDialogFragment.create()
-                dialog.show(supportFragmentManager, CoroutinesAddTaskDialogFragment.TAG)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_tasks, menu)
+        menu?.findItem(R.id.action_delete_all)?.apply {
+            isVisible = viewModel.tasks.value?.isNotEmpty() == true
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when(item?.itemId) {
+            R.id.action_delete_all -> consume {
+                viewModel.clearTasks()
             }
-            else -> super.handleNavigationRequest(request)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -80,19 +90,13 @@ class CoroutinesTasksActivity : BaseActivity(), CoroutinesAddTaskDialogFragment.
         viewModel.activateTask(taskId)
     }
 
-    private fun Toolbar.initTasksMenu() {
-        inflateMenu(R.menu.menu_tasks)
-        setOnMenuItemClickListener { item ->
-            val id = item?.itemId
-
-            var result = false
-
-            if (id == R.id.action_delete_all) {
-                viewModel.clearTasks()
-                result = true
+    private fun activityRouter() = Router { navCommand ->
+        when (navCommand) {
+            is CoroutinesTasksViewModel.Nav.AddNewTask -> consume {
+                val dialog = CoroutinesAddTaskDialogFragment.create()
+                dialog.show(supportFragmentManager, CoroutinesAddTaskDialogFragment.TAG)
             }
-
-            result
+            else -> false
         }
     }
 

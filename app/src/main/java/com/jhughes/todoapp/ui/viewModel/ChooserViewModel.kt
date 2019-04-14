@@ -1,6 +1,6 @@
 package com.jhughes.todoapp.ui.viewModel
 
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.NavigationCommand
 import javax.inject.Inject
 
 class ChooserViewModel @Inject constructor(): ArchViewModel() {
@@ -25,11 +25,11 @@ class ChooserViewModel @Inject constructor(): ArchViewModel() {
         navigate(Nav.SuperExample)
     }
 
-    class Nav {
-        object SimpleExample : NavigationRequest()
-        object LiveDataExample : NavigationRequest()
-        object PaperDbExample : NavigationRequest()
-        object CoroutinesExample : NavigationRequest()
-        object SuperExample : NavigationRequest()
+    sealed class Nav : NavigationCommand() {
+        object SimpleExample : Nav()
+        object LiveDataExample : Nav()
+        object PaperDbExample : Nav()
+        object CoroutinesExample : Nav()
+        object SuperExample : Nav()
     }
 }

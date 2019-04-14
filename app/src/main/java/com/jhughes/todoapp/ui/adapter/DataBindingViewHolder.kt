@@ -16,10 +16,10 @@ class DataBindingViewHolder<T : ViewDataBinding>(val binding: T)
     }
 
     fun markAttach() {
-        // Lifecycle.State.CREATED doesn't work for this case
-        // lifecycleRegistry.markState(Lifecycle.State.CREATED)
+        // Lifecycle.Resource.CREATED doesn't work for this case
+        // lifecycleRegistry.markState(Lifecycle.Resource.CREATED)
         lifecycleRegistry.markState(Lifecycle.State.STARTED)
-        // lifecycleRegistry.markState(Lifecycle.State.RESUMED)
+        // lifecycleRegistry.markState(Lifecycle.Resource.RESUMED)
     }
 
     fun markDetach() {

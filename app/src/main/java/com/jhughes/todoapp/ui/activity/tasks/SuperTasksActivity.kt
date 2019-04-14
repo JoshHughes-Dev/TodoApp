@@ -4,8 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
@@ -17,7 +18,7 @@ import com.jhughes.todoapp.ui.adapter.TaskAdapter
 import com.jhughes.todoapp.ui.fragment.addTask.SuperAddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.tasks.SuperTasksViewModel
 import com.jhughes.todoapp.ui.viewModel.util.LoadingEvent
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.Router
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import javax.inject.Inject
 
@@ -33,6 +34,7 @@ class SuperTasksActivity : BaseActivity(), TaskAdapter.OnActionListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        navigationRouters.add(activityRouter())
 
         binding = ActivityTasksBinding.inflate(layoutInflater)
         binding.lifecycleOwner = this
@@ -44,7 +46,6 @@ class SuperTasksActivity : BaseActivity(), TaskAdapter.OnActionListener {
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
-        binding.toolbar.initTasksMenu()
 
         binding.recyclerTasks.apply {
             adapter = tasksAdapter
@@ -55,23 +56,31 @@ class SuperTasksActivity : BaseActivity(), TaskAdapter.OnActionListener {
         viewModel.tasks.observe(this, Observer {
             Log.d("MainActivity", "tasks updated, count: ${it.size}")
             tasksAdapter.addTasks(it)
+            invalidateOptionsMenu()
         })
 
         tasksAdapter.onActionListener = this
     }
 
-    override fun handleNavigationRequest(request: NavigationRequest): Boolean {
-        return when (request) {
-            is SuperTasksViewModel.Nav.AddNewTask -> consume {
-                val dialog = SuperAddTaskDialogFragment.create()
-                dialog.show(supportFragmentManager, SuperAddTaskDialogFragment.TAG)
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_tasks, menu)
+        menu?.findItem(R.id.action_delete_all)?.apply {
+            isVisible = viewModel.tasks.value?.isNotEmpty() == true
+        }
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when(item?.itemId) {
+            R.id.action_delete_all -> consume {
+                viewModel.clearTasks()
             }
-            else -> super.handleNavigationRequest(request)
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun handleLoadingEvent(loadingEvent: LoadingEvent) {
-        super.handleLoadingEvent(loadingEvent)
+    override fun onLoadingEvent(loadingEvent: LoadingEvent) {
+        super.onLoadingEvent(loadingEvent)
         when (loadingEvent) {
             is LoadingEvent.Show -> {
                 binding.apply {
@@ -96,19 +105,13 @@ class SuperTasksActivity : BaseActivity(), TaskAdapter.OnActionListener {
         viewModel.activateTask(taskId)
     }
 
-    private fun Toolbar.initTasksMenu() {
-        inflateMenu(R.menu.menu_tasks)
-        setOnMenuItemClickListener { item ->
-            val id = item?.itemId
-
-            var result = false
-
-            if (id == R.id.action_delete_all) {
-                viewModel.clearTasks()
-                result = true
+    private fun activityRouter() = Router { navCommand ->
+        when (navCommand) {
+            is SuperTasksViewModel.Nav.AddNewTask -> consume {
+                val dialog = SuperAddTaskDialogFragment.create()
+                dialog.show(supportFragmentManager, SuperAddTaskDialogFragment.TAG)
             }
-
-            result
+            else -> false
         }
     }
 

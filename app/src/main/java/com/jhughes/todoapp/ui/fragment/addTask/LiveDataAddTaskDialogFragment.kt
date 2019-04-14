@@ -25,15 +25,13 @@ class LiveDataAddTaskDialogFragment : BaseDialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
         viewModel = viewModelProvider(factory)
-
-        bindToViewModelObservables(viewModel)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-
         binding.viewModel = viewModel
+        bindToViewModelObservables(viewModel)
 
         initToolbar(binding.toolbar)
 
@@ -43,6 +41,11 @@ class LiveDataAddTaskDialogFragment : BaseDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.txtDescription.requestFocus()
     }
 
     private fun initToolbar(toolbar: Toolbar) {

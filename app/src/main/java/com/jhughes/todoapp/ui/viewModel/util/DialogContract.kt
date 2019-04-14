@@ -20,16 +20,17 @@ interface DialogRequester {
 }
 
 interface DialogHandler {
-    fun bindToDialogObservable(lifecycleOwner: LifecycleOwner, dialogRequester: DialogRequester) {
-        dialogRequester.pendingDialogEvent.observe(lifecycleOwner, EventObserver {
-            handleDialogBuilder(it)
+
+    fun LifecycleOwner.observeDialogRequestsFrom(dialogRequester: DialogRequester) {
+        dialogRequester.pendingDialogEvent.observe(this, EventObserver {
+            onDialogToDisplay(it)
         })
-        dialogRequester.pendingDisplayableErrorEvent.observe(lifecycleOwner, EventObserver {
-            handleDisplayableError(it.error, it.retryCallback)
+        dialogRequester.pendingDisplayableErrorEvent.observe(this, EventObserver {
+            onErrorToDisplay(it.error, it.retryCallback)
         })
     }
 
-    fun handleDialogBuilder(builder: AlertDialog.Builder)
+    fun onDialogToDisplay(builder: AlertDialog.Builder)
 
-    fun handleDisplayableError(error: Throwable, retryCallback: (() -> Unit)?)
+    fun onErrorToDisplay(error: Throwable, retryCallback: (() -> Unit)?)
 }

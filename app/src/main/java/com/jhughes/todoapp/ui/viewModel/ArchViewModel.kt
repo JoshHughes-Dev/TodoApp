@@ -6,9 +6,9 @@ import com.jhughes.todoapp.ui.viewModel.util.*
 
 
 abstract class ArchViewModel : ObservableViewModel(), ScreenNavigationListener,
-        NavigationRequester, LoaderRequester, DialogRequester {
+        NavigationInvoker, LoaderRequester, DialogRequester {
 
-    override val navRequestEventData = EventLiveData<NavigationRequest>()
+    override val navCommandEventData = EventLiveData<NavigationCommand>()
     override val loadingEventData = EventLiveData<LoadingEvent>()
     override val pendingDialogEvent =  EventLiveData<AlertDialog.Builder>()
     override val pendingDisplayableErrorEvent = EventLiveData<DialogRequester.ErrorWrapper>()

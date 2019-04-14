@@ -12,7 +12,7 @@ import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
 import com.jhughes.todoapp.ui.fragment.BaseDialogFragment
 import com.jhughes.todoapp.ui.viewModel.addTask.SimpleAddTaskViewModel
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.Router
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import javax.inject.Inject
 
@@ -40,15 +40,15 @@ class SimpleAddTaskDialogFragment : BaseDialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.AppTheme_FullScreenDialog)
         viewModel = viewModelProvider(factory)
-
-        bindToViewModelObservables(viewModel)
+        navigationRouters.add(dialogRouter())
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAddTaskBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
-
         binding.viewModel = viewModel
+
+        bindToViewModelObservables(viewModel)
 
         initToolbar(binding.toolbar)
 
@@ -58,6 +58,11 @@ class SimpleAddTaskDialogFragment : BaseDialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        binding.txtDescription.requestFocus()
     }
 
     private fun initToolbar(toolbar: Toolbar) {
@@ -84,13 +89,13 @@ class SimpleAddTaskDialogFragment : BaseDialogFragment() {
         }
     }
 
-    override fun handleNavigationRequest(request: NavigationRequest): Boolean {
-        return when (request) {
+    private fun dialogRouter() = Router { navCommand ->
+        when (navCommand) {
             SimpleAddTaskViewModel.Nav.AddedTask -> consume {
                 onActionListener.onTaskAdded()
                 dismiss()
             }
-            else -> super.handleNavigationRequest(request)
+            else -> false
         }
     }
 

@@ -3,7 +3,7 @@ package com.jhughes.todoapp.ui.viewModel.addTask
 import androidx.databinding.Bindable
 import com.jhughes.todoapp.BR
 import com.jhughes.todoapp.data.domain.repo.TaskRepository
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.NavigationCommand
 import javax.inject.Inject
 
 class SimpleAddTaskViewModel @Inject constructor(
@@ -28,6 +28,6 @@ class SimpleAddTaskViewModel @Inject constructor(
     }
 
     class Nav {
-        object AddedTask : NavigationRequest()
+        object AddedTask : NavigationCommand()
     }
 }

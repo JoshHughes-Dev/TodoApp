@@ -4,7 +4,7 @@ import androidx.databinding.Bindable
 import androidx.databinding.library.baseAdapters.BR
 import com.jhughes.todoapp.data.SimpleResult
 import com.jhughes.todoapp.data.domain.repo.SuperTasksRepo
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.NavigationCommand
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -32,7 +32,7 @@ class SuperAddTaskViewModel @Inject constructor(
                     dismissLoader()
                     when(result) {
                         is SimpleResult.Success -> {
-                            navigate(NavigationRequest.Close)
+                            navigate(NavigationCommand.Close)
                         }
                         is SimpleResult.Error -> {
                             showError(result.exception)

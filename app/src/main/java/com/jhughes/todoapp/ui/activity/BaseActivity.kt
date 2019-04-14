@@ -17,18 +17,19 @@ import dagger.android.support.DaggerAppCompatActivity
 abstract class BaseActivity : DaggerAppCompatActivity(), UiController,
         NavigationHandler, LoaderHandler, DialogHandler {
 
-    override val routers: MutableList<Router> = mutableListOf()
+    override val navigationRouters: MutableList<Router> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        routers.apply {
-            add(createCustomRouter())
-            add(UiControllerRouter(this@BaseActivity))
-        }
+        navigationRouters.add(UiControllerRouter(this@BaseActivity))
     }
 
-    override fun handleLoadingEvent(loadingEvent: LoadingEvent) {
+    override fun onDestroy() {
+        super.onDestroy()
+        navigationRouters.clear()
+    }
+
+    override fun onLoadingEvent(loadingEvent: LoadingEvent) {
         when (loadingEvent) {
             is LoadingEvent.Show -> {
                 Log.d("BaseActivity", "show loader")
@@ -42,11 +43,11 @@ abstract class BaseActivity : DaggerAppCompatActivity(), UiController,
         }
     }
 
-    override fun handleDialogBuilder(builder: AlertDialog.Builder) {
+    override fun onDialogToDisplay(builder: AlertDialog.Builder) {
         //dialogHandler.showDialog(builder)
     }
 
-    override fun handleDisplayableError(error: Throwable, retryCallback: (() -> Unit)?) {
+    override fun onErrorToDisplay(error: Throwable, retryCallback: (() -> Unit)?) {
         //dialogHandler.showError(error, retryCallback)
     }
 
@@ -66,29 +67,13 @@ abstract class BaseActivity : DaggerAppCompatActivity(), UiController,
         dialogFragment.show(supportFragmentManager, tag)
     }
 
-    override fun close() {
-        finish()
-    }
+    override fun close() = finish()
 
-    override fun back() {
-        onBackPressed()
-    }
+    override fun back() = onBackPressed()
 
     fun bindToViewModelObservables(viewModel: ArchViewModel) {
-        bindToNavigationObservable(this, viewModel)
-        bindToLoaderObservable(this, viewModel)
-        bindToDialogObservable(this, viewModel)
+        observeNavigationCommandsFrom(viewModel)
+        observeLoadingEventsFrom(viewModel)
+        observeDialogRequestsFrom(viewModel)
     }
-
-    open fun handleNavigationRequest(request: NavigationRequest): Boolean {
-        return false
-    }
-
-    private fun createCustomRouter(): Router {
-        return object : Router() {
-            override fun routeNavigationRequest(request: NavigationRequest) = handleNavigationRequest(request)
-        }
-    }
-
-
 }

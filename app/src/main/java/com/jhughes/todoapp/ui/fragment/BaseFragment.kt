@@ -13,17 +13,19 @@ import dagger.android.support.DaggerFragment
 abstract class BaseFragment : DaggerFragment(), NavigationHandler, LoaderHandler,
         DialogHandler, UiController {
 
-    override val routers: MutableList<Router> = mutableListOf()
+    override val navigationRouters: MutableList<Router> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        routers.apply {
-            add(createCustomRouter())
-            add(UiControllerRouter(this@BaseFragment))
-        }
+        navigationRouters.add(UiControllerRouter(this@BaseFragment))
     }
 
-    override fun handleLoadingEvent(loadingEvent: LoadingEvent) {
+    override fun onDestroy() {
+        super.onDestroy()
+        navigationRouters.clear()
+    }
+
+    override fun onLoadingEvent(loadingEvent: LoadingEvent) {
         when (loadingEvent) {
             is LoadingEvent.Show -> {}
                 //dialogHandler.showLoading(loadingEvent.cancelable, loadingEvent.cancelCallback)
@@ -36,11 +38,11 @@ abstract class BaseFragment : DaggerFragment(), NavigationHandler, LoaderHandler
         }
     }
 
-    override fun handleDialogBuilder(builder: AlertDialog.Builder) {
+    override fun onDialogToDisplay(builder: AlertDialog.Builder) {
         //dialogHandler.showDialog(builder)
     }
 
-    override fun handleDisplayableError(error: Throwable, retryCallback: (() -> Unit)?) {
+    override fun onErrorToDisplay(error: Throwable, retryCallback: (() -> Unit)?) {
         //dialogHandler.showError(error, retryCallback)
     }
 
@@ -48,19 +50,9 @@ abstract class BaseFragment : DaggerFragment(), NavigationHandler, LoaderHandler
      * binding to ViewLifeCycleOwner not LifeCycleOwner, call in OnViewCreated
      * */
     fun bindToViewModelObservables(viewModel : ArchViewModel) {
-        bindToNavigationObservable(viewLifecycleOwner, viewModel)
-        bindToLoaderObservable(viewLifecycleOwner, viewModel)
-        bindToDialogObservable(viewLifecycleOwner, viewModel)
-    }
-
-    open fun handleNavigationRequest(request: NavigationRequest) : Boolean {
-        return false
-    }
-
-    private fun createCustomRouter() : Router {
-        return object : Router() {
-            override fun routeNavigationRequest(request: NavigationRequest) = handleNavigationRequest(request)
-        }
+        viewLifecycleOwner.observeNavigationCommandsFrom(viewModel)
+        viewLifecycleOwner.observeLoadingEventsFrom(viewModel)
+        viewLifecycleOwner.observeDialogRequestsFrom(viewModel)
     }
 
     override fun startActivity(requestCode: Int?, func: () -> Intent) {

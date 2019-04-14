@@ -3,7 +3,7 @@ package com.jhughes.todoapp.ui.viewModel.addTask
 import androidx.databinding.Bindable
 import com.jhughes.todoapp.BR
 import com.jhughes.todoapp.data.domain.repo.LiveDataTaskRepo
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.NavigationCommand
 import javax.inject.Inject
 
 class LiveDataAddTaskViewModel @Inject constructor(
@@ -22,7 +22,7 @@ class LiveDataAddTaskViewModel @Inject constructor(
             notifyPropertyChanged(BR.error)
         } else {
             liveDataTaskRepo.addTask(value) {
-                navigate(NavigationRequest.Close)
+                navigate(NavigationCommand.Close)
             }
         }
     }

@@ -8,7 +8,7 @@ import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivityChooserBinding
 import com.jhughes.todoapp.ui.activity.tasks.*
 import com.jhughes.todoapp.ui.viewModel.ChooserViewModel
-import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
+import com.jhughes.todoapp.ui.viewModel.util.Router
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import javax.inject.Inject
 
@@ -32,10 +32,12 @@ class ChooserActivity : BaseActivity() {
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
+        navigationRouters.add(activityRouter())
     }
 
-    override fun handleNavigationRequest(request: NavigationRequest): Boolean {
-        return when(request) {
+    private fun activityRouter() = Router { navCommand ->
+        when(navCommand) {
             is ChooserViewModel.Nav.SimpleExample -> consume {
                 startActivity(SimpleTasksActivity.getStartIntent(requireActivity()))
             }
@@ -51,7 +53,7 @@ class ChooserActivity : BaseActivity() {
             is ChooserViewModel.Nav.SuperExample -> consume {
                 startActivity(SuperTasksActivity.getStartIntent(requireActivity()))
             }
-            else -> super.handleNavigationRequest(request)
+            else -> false
         }
     }
 
