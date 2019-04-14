@@ -15,6 +15,7 @@ class LiveDataTasksViewModel @Inject constructor(
         navigate(Nav.AddNewTask)
     }
 
+
     class Nav {
         object AddNewTask : NavigationRequest()
     }

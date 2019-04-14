@@ -81,7 +81,7 @@ abstract class BaseDialogFragment : DaggerDialogFragment(), NavigationHandler, L
     }
 
     override fun back() {
-        //onBackPressed()
+        dismiss()
     }
 
     companion object {

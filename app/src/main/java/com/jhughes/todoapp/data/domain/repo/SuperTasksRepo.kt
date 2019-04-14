@@ -6,6 +6,7 @@ import com.jhughes.todoapp.data.SimpleResult
 import com.jhughes.todoapp.data.State
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.local.paperDb.SuperPaperDbTasksDataSource
+import com.jhughes.todoapp.safeAction
 import kotlinx.coroutines.CoroutineScope
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -42,12 +43,8 @@ class SuperTasksRepo @Inject constructor(
         return safeAction { localDataSource.activateTask(taskId) }
     }
 
-    private suspend fun safeAction(func : suspend () -> Unit) : SimpleResult {
-        return try {
-            func()
-            SimpleResult.Success
-        } catch (e : Exception) {
-            SimpleResult.Error(e)
-        }
+    suspend fun clearTasks() {
+        localDataSource.clearTasks()
     }
+
 }

@@ -22,12 +22,9 @@ class LiveDataAddTaskViewModel @Inject constructor(
             notifyPropertyChanged(BR.error)
         } else {
             liveDataTaskRepo.addTask(value) {
-                navigate(Nav.AddedTask)
+                navigate(NavigationRequest.Close)
             }
         }
     }
 
-    class Nav {
-        object AddedTask : NavigationRequest()
-    }
 }

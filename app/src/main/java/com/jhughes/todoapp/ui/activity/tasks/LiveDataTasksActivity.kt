@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.jhughes.todoapp.R
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivityTasksBinding
-import com.jhughes.todoapp.ui.BaseActivity
+import com.jhughes.todoapp.ui.activity.BaseActivity
 import com.jhughes.todoapp.ui.adapter.TaskAdapter
 import com.jhughes.todoapp.ui.fragment.addTask.LiveDataAddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.tasks.LiveDataTasksViewModel
@@ -17,8 +19,7 @@ import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
 import javax.inject.Inject
 
-class LiveDataTasksActivity  : BaseActivity(), LiveDataAddTaskDialogFragment.OnActionListener,
-        TaskAdapter.OnActionListener {
+class LiveDataTasksActivity  : BaseActivity(), TaskAdapter.OnActionListener {
 
     private lateinit var binding: ActivityTasksBinding
     private lateinit var viewModel: LiveDataTasksViewModel
@@ -41,6 +42,7 @@ class LiveDataTasksActivity  : BaseActivity(), LiveDataAddTaskDialogFragment.OnA
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        binding.toolbar.initTasksMenu()
 
         binding.recyclerTasks.apply {
             adapter = tasksAdapter
@@ -66,15 +68,28 @@ class LiveDataTasksActivity  : BaseActivity(), LiveDataAddTaskDialogFragment.OnA
         }
     }
 
-    override fun onTaskAdded() {
-    }
-
     override fun onCompleteTask(taskId: Int) {
         viewModel.liveDataTaskRepo.completeTask(taskId)
     }
 
     override fun onActivateTask(taskId: Int) {
         viewModel.liveDataTaskRepo.activateTask(taskId)
+    }
+
+    private fun Toolbar.initTasksMenu() {
+        inflateMenu(R.menu.menu_tasks)
+        setOnMenuItemClickListener { item ->
+            val id = item?.itemId
+
+            var result = false
+
+            if (id == R.id.action_delete_all) {
+                viewModel.liveDataTaskRepo.clearTasks()
+                result = true
+            }
+
+            result
+        }
     }
 
     companion object Factory {

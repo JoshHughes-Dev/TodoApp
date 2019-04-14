@@ -8,9 +8,7 @@ import com.jhughes.todoapp.data.State
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.domain.repo.SuperTasksRepo
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class SuperTasksViewModel @Inject constructor(
@@ -39,9 +37,7 @@ class SuperTasksViewModel @Inject constructor(
 
     fun completeTask(taskId: Int) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.Default) {
-                superTasksRepo.completeTask(taskId)
-            }
+            val result = superTasksRepo.completeTask(taskId)
             when(result) {
                 is SimpleResult.Success -> {
                     //do nothing
@@ -55,9 +51,7 @@ class SuperTasksViewModel @Inject constructor(
 
     fun activateTask(taskId: Int) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.Default) {
-                superTasksRepo.activateTask(taskId)
-            }
+            val result = superTasksRepo.activateTask(taskId)
             when(result) {
                 is SimpleResult.Success -> {
                     //do nothing
@@ -66,6 +60,12 @@ class SuperTasksViewModel @Inject constructor(
                     showError(result.exception)
                 }
             }
+        }
+    }
+
+    fun clearTasks() {
+        viewModelScope.launch {
+            superTasksRepo.clearTasks()
         }
     }
 

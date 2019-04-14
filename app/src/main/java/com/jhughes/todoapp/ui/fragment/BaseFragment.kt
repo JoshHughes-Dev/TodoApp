@@ -77,13 +77,13 @@ abstract class BaseFragment : DaggerFragment(), NavigationHandler, LoaderHandler
 
     override fun close() {
         try {
-            //(parentFragment as BaseFragment).onBackPressed() todo
+            //(parentFragment as BaseFragment).onBackPressed()
         } catch (e: Exception) {
             requireActivity().onBackPressed()
         }
     }
 
     override fun back() {
-        //onBackPressed() todo
+        //onBackPressed()
     }
 }

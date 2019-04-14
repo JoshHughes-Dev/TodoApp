@@ -2,6 +2,7 @@ package com.jhughes.todoapp.data.local.paperDb
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.jhughes.todoapp.data.domain.model.Task
 import io.paperdb.Paper
 import kotlinx.coroutines.CoroutineScope
@@ -28,7 +29,13 @@ class SuperPaperDbTasksDataSource @Inject constructor() {
         return cachedTasks
     }
 
-    fun addTask(description : String) {
+    fun getTask(taskId: Int) : LiveData<Task?> {
+        return Transformations.map(cachedTasks) { tasks ->
+            tasks.find { it.id == taskId }
+        }
+    }
+
+    suspend fun addTask(description : String) = withContext(Dispatchers.IO) {
         val tasks = (cachedTasks.value ?: readTasks()).toMutableList()
 
         val newId = (tasks.lastOrNull()?.id ?: 0) + 1
@@ -40,18 +47,23 @@ class SuperPaperDbTasksDataSource @Inject constructor() {
         cachedTasks.postValue(tasks)
     }
 
-    fun completeTask(taskId : Int) {
+    suspend fun completeTask(taskId : Int) = withContext(Dispatchers.IO) {
         val tasks = (cachedTasks.value ?: readTasks()).toMutableList()
         tasks.find { it.id == taskId }?.isComplete = true
         saveTasks(tasks)
         cachedTasks.postValue(tasks)
     }
 
-    fun activateTask(taskId: Int) {
+    suspend fun activateTask(taskId: Int) = withContext(Dispatchers.IO) {
         val tasks = readTasks().toMutableList()
         tasks.find { it.id == taskId }?.isComplete = false
         saveTasks(tasks)
         cachedTasks.postValue(tasks)
+    }
+
+    suspend fun clearTasks() = withContext(Dispatchers.IO) {
+        Paper.book().delete(ENTRY_NAME)
+        cachedTasks.postValue(emptyList())
     }
 
     private fun readTasks() : List<Task> {

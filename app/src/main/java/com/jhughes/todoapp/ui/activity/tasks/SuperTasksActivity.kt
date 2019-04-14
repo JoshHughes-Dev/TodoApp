@@ -5,12 +5,14 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.jhughes.todoapp.R
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivityTasksBinding
-import com.jhughes.todoapp.ui.BaseActivity
+import com.jhughes.todoapp.ui.activity.BaseActivity
 import com.jhughes.todoapp.ui.adapter.TaskAdapter
 import com.jhughes.todoapp.ui.fragment.addTask.SuperAddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.tasks.SuperTasksViewModel
@@ -42,6 +44,7 @@ class SuperTasksActivity : BaseActivity(), TaskAdapter.OnActionListener {
 
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+        binding.toolbar.initTasksMenu()
 
         binding.recyclerTasks.apply {
             adapter = tasksAdapter
@@ -91,6 +94,22 @@ class SuperTasksActivity : BaseActivity(), TaskAdapter.OnActionListener {
 
     override fun onActivateTask(taskId: Int) {
         viewModel.activateTask(taskId)
+    }
+
+    private fun Toolbar.initTasksMenu() {
+        inflateMenu(R.menu.menu_tasks)
+        setOnMenuItemClickListener { item ->
+            val id = item?.itemId
+
+            var result = false
+
+            if (id == R.id.action_delete_all) {
+                viewModel.clearTasks()
+                result = true
+            }
+
+            result
+        }
     }
 
     companion object Factory {

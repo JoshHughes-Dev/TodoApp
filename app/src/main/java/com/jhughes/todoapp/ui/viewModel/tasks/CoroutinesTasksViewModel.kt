@@ -1,20 +1,18 @@
 package com.jhughes.todoapp.ui.viewModel.tasks
 
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
-import com.jhughes.todoapp.data.Result
+import androidx.lifecycle.LiveData
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.domain.repo.CoroutineTaskRepo
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CoroutinesTasksViewModel @Inject constructor(
         val coroutineTaskRepo: CoroutineTaskRepo) : TasksViewModel() {
 
-    val tasks: MutableLiveData<List<Task>> = MutableLiveData()
+    //val tasks: MutableLiveData<List<Task>> = MutableLiveData()
+
+    val tasks: LiveData<List<Task>> = coroutineTaskRepo.getLiveTasks(viewModelScope)
 
     init {
         refreshData()
@@ -25,46 +23,47 @@ class CoroutinesTasksViewModel @Inject constructor(
     }
 
     fun refreshData() {
-        viewModelScope.launch {
-            showLoader()
-            val result = withContext(Dispatchers.Default) {
-                coroutineTaskRepo.getTasks()
-            }
-            dismissLoader()
-            processResult(result)
-        }
+        //viewModelScope.launch {
+        //    showLoader()
+       //     val result = coroutineTaskRepo.getTasks()
+       //     dismissLoader()
+       //     processResult(result)
+       // }
     }
 
     fun completeTask(taskId: Int) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.Default) {
-                coroutineTaskRepo.completeTask(taskId)
-                coroutineTaskRepo.getTasks()
-            }
-            processResult(result)
+            coroutineTaskRepo.completeTask(taskId)
+            //val result = coroutineTaskRepo.getTasks()
+            //processResult(result)
         }
     }
 
     fun activateTask(taskId: Int) {
         viewModelScope.launch {
-            val result = withContext(Dispatchers.Default) {
-                coroutineTaskRepo.activateTask(taskId)
-                coroutineTaskRepo.getTasks()
-            }
-            processResult(result)
+            coroutineTaskRepo.activateTask(taskId)
+           // val result = coroutineTaskRepo.getTasks()
+           // processResult(result)
         }
     }
 
-    private fun processResult(result: Result<List<Task>>) {
-        when (result) {
-            is Result.Success -> {
-                tasks.value = result.data
-            }
-            is Result.Error -> {
-                Log.d("MainViewModlel", "result error")
-            }
+    fun clearTasks() {
+        viewModelScope.launch {
+            coroutineTaskRepo.clearTasks()
         }
+
     }
+
+//    private fun processResult(result: Result<List<Task>>) {
+//        when (result) {
+//            is Result.Success -> {
+//                tasks.value = result.data
+//            }
+//            is Result.Error -> {
+//                Log.d("MainViewModlel", "result error")
+//            }
+//        }
+//    }
 
     class Nav {
         object AddNewTask : NavigationRequest()

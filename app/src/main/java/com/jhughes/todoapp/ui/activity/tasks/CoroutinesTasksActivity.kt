@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.SimpleItemAnimator
+import com.jhughes.todoapp.R
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivityTasksBinding
-import com.jhughes.todoapp.ui.BaseActivity
+import com.jhughes.todoapp.ui.activity.BaseActivity
 import com.jhughes.todoapp.ui.adapter.TaskAdapter
 import com.jhughes.todoapp.ui.fragment.addTask.CoroutinesAddTaskDialogFragment
 import com.jhughes.todoapp.ui.viewModel.tasks.CoroutinesTasksViewModel
@@ -76,6 +78,22 @@ class CoroutinesTasksActivity : BaseActivity(), CoroutinesAddTaskDialogFragment.
 
     override fun onActivateTask(taskId: Int) {
         viewModel.activateTask(taskId)
+    }
+
+    private fun Toolbar.initTasksMenu() {
+        inflateMenu(R.menu.menu_tasks)
+        setOnMenuItemClickListener { item ->
+            val id = item?.itemId
+
+            var result = false
+
+            if (id == R.id.action_delete_all) {
+                viewModel.clearTasks()
+                result = true
+            }
+
+            result
+        }
     }
 
     companion object Factory {

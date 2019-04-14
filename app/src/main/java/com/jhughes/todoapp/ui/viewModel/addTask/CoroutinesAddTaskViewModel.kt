@@ -4,9 +4,7 @@ import androidx.databinding.Bindable
 import com.jhughes.todoapp.BR
 import com.jhughes.todoapp.data.domain.repo.CoroutineTaskRepo
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class CoroutinesAddTaskViewModel @Inject constructor(
@@ -25,9 +23,7 @@ class CoroutinesAddTaskViewModel @Inject constructor(
             notifyPropertyChanged(BR.error)
         } else {
             viewModelScope.launch {
-                withContext(Dispatchers.Default) {
-                    coroutineTaskRepo.addTask(value)
-                }
+                coroutineTaskRepo.addTask(value)
                 navigate(Nav.AddedTask)
             }
         }

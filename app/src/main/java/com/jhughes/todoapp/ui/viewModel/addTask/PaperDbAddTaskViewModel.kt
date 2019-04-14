@@ -22,12 +22,8 @@ class PaperDbAddTaskViewModel@Inject constructor(
             notifyPropertyChanged(BR.error)
         } else {
             paperDbTaskRepo.addTask(value) {
-                navigate(Nav.AddedTask)
+                navigate(NavigationRequest.Close)
             }
         }
-    }
-
-    class Nav {
-        object AddedTask : NavigationRequest()
     }
 }

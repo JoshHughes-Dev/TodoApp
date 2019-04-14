@@ -14,7 +14,6 @@ import com.jhughes.todoapp.ui.fragment.BaseDialogFragment
 import com.jhughes.todoapp.ui.viewModel.addTask.CoroutinesAddTaskViewModel
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 class CoroutinesAddTaskDialogFragment: BaseDialogFragment() {
@@ -28,7 +27,6 @@ class CoroutinesAddTaskDialogFragment: BaseDialogFragment() {
     private lateinit var onActionListener: OnActionListener
 
     override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
         super.onAttach(context)
         try {
             onActionListener = context as OnActionListener

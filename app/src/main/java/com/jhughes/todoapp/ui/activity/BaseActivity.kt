@@ -1,4 +1,4 @@
-package com.jhughes.todoapp.ui
+package com.jhughes.todoapp.ui.activity
 
 import android.content.Context
 import android.content.Intent

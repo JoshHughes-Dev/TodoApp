@@ -6,7 +6,6 @@ import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivityChooserBinding
-import com.jhughes.todoapp.ui.BaseActivity
 import com.jhughes.todoapp.ui.activity.tasks.*
 import com.jhughes.todoapp.ui.viewModel.ChooserViewModel
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest

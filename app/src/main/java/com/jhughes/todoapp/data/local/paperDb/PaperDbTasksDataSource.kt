@@ -2,6 +2,7 @@ package com.jhughes.todoapp.data.local.paperDb
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.util.IoScheduler
 import io.paperdb.Paper
@@ -23,6 +24,12 @@ class PaperDbTasksDataSource @Inject constructor() {
             }
         }
         return cachedTasks
+    }
+
+    fun getTask(taskId: Int) : LiveData<Task> {
+        return Transformations.map(getTasks()) { tasks ->
+            tasks.find { it.id == taskId }
+        }
     }
 
     fun addTask(description : String) {
@@ -54,6 +61,21 @@ class PaperDbTasksDataSource @Inject constructor() {
             tasks.find { it.id == taskId }?.isComplete = false
             saveTasks(tasks)
             cachedTasks.postValue(tasks)
+        }
+    }
+
+    fun clearTasks() {
+        IoScheduler.execute {
+            deleteTasks()
+            cachedTasks.postValue(emptyList())
+        }
+    }
+
+    private fun deleteTasks() {
+        try {
+            Paper.book().delete(ENTRY_NAME)
+        } catch (e : PaperDbException) {
+            //todo error
         }
     }
 

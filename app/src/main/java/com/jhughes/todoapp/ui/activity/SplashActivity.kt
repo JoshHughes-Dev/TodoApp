@@ -5,7 +5,6 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.jhughes.todoapp.consume
 import com.jhughes.todoapp.databinding.ActivitySplashBinding
-import com.jhughes.todoapp.ui.BaseActivity
 import com.jhughes.todoapp.ui.viewModel.SplashViewModel
 import com.jhughes.todoapp.ui.viewModel.util.NavigationRequest
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider

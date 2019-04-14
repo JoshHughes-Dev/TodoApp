@@ -1,6 +1,5 @@
 package com.jhughes.todoapp.data.domain.repo
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.jhughes.todoapp.data.domain.model.Task
@@ -23,6 +22,12 @@ class LiveDataTaskRepo @Inject constructor(
         }
     }
 
+    fun getTask(taskId: Int) : LiveData<Task?> {
+        return Transformations.map(taskEntityDao.findTaskById(taskId)) {
+            taskMapper.toDomain(it)
+        }
+    }
+
     fun addTask(description : String, callback: (Task) -> Unit) {
         val task = Task(0, false, description, DateTime.now())
 
@@ -35,16 +40,20 @@ class LiveDataTaskRepo @Inject constructor(
     }
 
     fun completeTask(taskId: Int) {
-        Log.d("Repo", "task complete")
         IoScheduler.execute {
             taskEntityDao.updateCompleted(taskId, true)
         }
     }
 
     fun activateTask(taskId: Int) {
-        Log.d("Repo", "task activated")
         IoScheduler.execute {
             taskEntityDao.updateCompleted(taskId, false)
+        }
+    }
+
+    fun clearTasks() {
+        IoScheduler.execute {
+            taskEntityDao.deleteAll()
         }
     }
 }

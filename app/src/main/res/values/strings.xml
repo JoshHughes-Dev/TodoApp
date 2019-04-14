@@ -2,7 +2,7 @@
     <string name="app_name">Todo</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
-
+    <string name="tasks_delete_all">Delete All</string>
 
     <!-- Add task-->
     <eat-comment/>

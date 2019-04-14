@@ -1,6 +1,5 @@
 package com.jhughes.todoapp.data.domain.repo
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import com.jhughes.todoapp.data.domain.model.Task
 import com.jhughes.todoapp.data.local.paperDb.PaperDbTasksDataSource
@@ -15,18 +14,24 @@ class PaperDbTaskRepo @Inject constructor(
         return paperDbTasksDataSource.getTasks()
     }
 
-    fun completeTask(taskId: Int) {
-        Log.d("Repo", "task complete")
-        paperDbTasksDataSource.completeTask(taskId)
-    }
-
-    fun activateTask(taskId: Int) {
-        Log.d("Repo", "task activated")
-        paperDbTasksDataSource.activateTask(taskId)
+    fun getTask(taskId: Int) : LiveData<Task> {
+        return paperDbTasksDataSource.getTask(taskId)
     }
 
     fun addTask(description: String, callback: () -> Unit) {
         paperDbTasksDataSource.addTask(description)
         callback()
+    }
+
+    fun completeTask(taskId: Int) {
+        paperDbTasksDataSource.completeTask(taskId)
+    }
+
+    fun activateTask(taskId: Int) {
+        paperDbTasksDataSource.activateTask(taskId)
+    }
+
+    fun clearTasks() {
+        paperDbTasksDataSource.clearTasks()
     }
 }

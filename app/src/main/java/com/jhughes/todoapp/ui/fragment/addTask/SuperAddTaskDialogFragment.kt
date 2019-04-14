@@ -1,6 +1,5 @@
 package com.jhughes.todoapp.ui.fragment.addTask
 
-import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.widget.Toolbar
@@ -12,7 +11,6 @@ import com.jhughes.todoapp.databinding.FragmentAddTaskBinding
 import com.jhughes.todoapp.ui.fragment.BaseDialogFragment
 import com.jhughes.todoapp.ui.viewModel.addTask.SuperAddTaskViewModel
 import com.jhughes.todoapp.ui.viewModel.util.viewModelProvider
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Inject
 
 class SuperAddTaskDialogFragment : BaseDialogFragment() {
@@ -22,11 +20,6 @@ class SuperAddTaskDialogFragment : BaseDialogFragment() {
 
     @Inject
     lateinit var factory: ViewModelProvider.Factory
-
-    override fun onAttach(context: Context?) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

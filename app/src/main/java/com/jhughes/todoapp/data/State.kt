@@ -6,7 +6,3 @@ sealed class State<out T : Any> {
     class Error(val exception: Throwable) : State<Nothing>()
 }
 
-sealed class SimpleResult {
-    object Success : SimpleResult()
-    class Error(val exception: Throwable) : SimpleResult()
-}
