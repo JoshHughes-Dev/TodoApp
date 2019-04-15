@@ -47,6 +47,7 @@
             android:name=".ui.activity.tasks.SuperTasksActivity"
             android:theme="@style/AppTheme.Main"
             android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ui.activity.task.SimpleTaskDetailsActivity" />
     </application>
 
 </manifest>

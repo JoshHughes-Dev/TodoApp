@@ -60,8 +60,15 @@ class TaskRepository @Inject constructor(private val localDataSource: SimpleRoom
         }
     }
 
+    fun deleteTask(task: Task) {
+       cachedTasks = cachedTasks?.toMutableList()?.apply {
+           remove(task)
+       }
+    }
+
     fun clearTasks() {
         cachedTasks = null
         localDataSource.clearTasks()
     }
+
 }
